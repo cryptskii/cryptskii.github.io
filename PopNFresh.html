@@ -1,375 +1,157 @@
-<h1>PopN'Fresh: ".pnf"</h1><hr><br> Welcome to the Pop 'n' Fresh language specification!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop 'n' Fresh Language Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #443a2c; /* Faded notepad yellow */
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fef8e1;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            background-color: #000;
+            color: #00ff00; /* Green text to match code blocks */
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+        }
+        h2, h3, h4, h5 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #000;
+            color: #00ff00; /* Green font */
+            padding: 5px;
+            border-radius: 5px;
+            overflow-x: auto;
 
-This page provides a detailed overview of the language's syntax, semantics, and supported data types.
+            margin-bottom: 15px;
+            max-width: 98%;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .example {
+            background-color: #e6f3ff;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .command {
+            display: inline-block;
+            background-color: #000;
+            color: #00ff00;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pop 'n' Fresh Language Specification</h1>
+        
+        <div class="section">
+            <h2>1. Syntax and Structure</h2>
+            <p>Pop 'n' Fresh follows a clear structure defined by strict formatting and rule sets. Each statement in the language adheres to the following general format:</p>
+            <ul>
+                <li><strong>Statements:</strong> Must end with a semicolon (<code>;</code>).</li>
+                <li><strong>Blocks:</strong> Enclosed by curly braces <code>{}</code>.</li>
+                <li><strong>Indentation:</strong> Not mandatory but strongly recommended for clarity.</li>
+                <li><strong>Comments:</strong> Single-line comments start with <code>//</code>, multi-line comments are enclosed in <code>/* */</code>.</li>
+            </ul>
+            <h4>Example:</h4>
+            <pre><code>// Single-line comment
+            {operation: "add"; // Block start
+            num1: 3;
+            num2: 5;
+            result: 0;
+            // Call operation   
+            result = add(num1, num2);
+            }</code></pre>
+        </div>
 
-If you're new to the language, start with the Syntax section to understand the basic structure and rules.
-
-For more information on the language, check out the Semantics section, which covers the operations and commands supported by the language.
-
-The Data Types section provides an overview of the supported data types and structures in the language.
-
-If you're ready to dive into the language, check out the Built-in Functions section, which lists the built-in functions available in the language.   <h4>1. <b>Syntax and Structure</b></h4><p>The syntax of <b>Pop 'n' Fresh</b> follows a clear structure defined by strict formatting and rule sets. Each statement in the language adheres to the following general format:</p><br>
-<ul>
-<li><b>Statements:</b> Must end with a semicolon (<code>;</code>).</li>
-<li><b>Blocks:</b> Blocks are enclosed by curly braces <code>{}</code>.</li>
-<li><b>Indentation:</b> Indentation is not mandatory but strongly recommended for clarity.</li>
-<li><b>Comments:</b> Single-line comments start with <code>//</code>, while multi-line comments are enclosed in <code>/* */</code>.</li>
-</ul><br>
-<h5>Syntax Example:</h5><pre><code>// Single-line comment
-{
-  operation: "add"; // Block start
-  num1: 3;
-  num2: 5;
-  result: 0;
-  // Call operation
-  result = add(num1, num2);
-}</code></pre><br>
-<h4>2. <b>Semantics of Operations and Commands</b></h4><p>Operations in <b>toaster.Json</b> are built on a functional paradigm with state transformations being explicit. All operations consist of a source, a command, and an optional result. The language ensures that side effects are minimized by default, making state changes explicit within blocks.</p><br>
-<h5>Example of Operation Semantics:</h5><pre><code>{
-  input: 4;
-  factor: 3;
-  output: 0;
-  output = multiply(input, factor); // Semantically pure operation
-}</code></pre><br>
-<ul>
-<li><b>Arithmetic Operations</b> such as <code>add()</code>, <code>subtract()</code>, <code>multiply()</code>, and <code>divide()</code> follow traditional semantics.</li>
-<li><b>Assignment Operations</b> such as <code>x = y;</code> assign the value of <code>y</code> to <code>x</code>.</li>
-</ul><br>
-<h4>3. <b>Supported Data Types and Structures</b></h4><p>The language supports the following primitive data types and composite structures:</p><br>
-<ul>
-<li><b>Primitives:</b>
-<ul>
-<li><code>int</code>: Represents integer numbers.</li>
-<li><code>float</code>: Represents floating-point numbers.</li>
-<li><code>string</code>: A sequence of characters.</li>
-<li><code>bool</code>: Represents boolean values (<code>true</code> or <code>false</code>).</li>
-</ul>
-<br></li>
-<li><b>Composite Types:</b>
-<ul>
-<li><b>Arrays</b> are denoted by square brackets <code>[]</code> and can hold elements of the same type.</li>
-<li><b>Objects</b> are denoted by curly braces <code>{}</code> and consist of key-value pairs, where the key is a string and the value can be of any type.</li>
-</ul>
-</li>
-</ul><br>
-<h5>Interaction Example:</h5><pre><code>{
-  arr: [1, 2, 3, 4];
-  obj: {
-    "key1": "value1",
-    "key2": true,
-    "key3": 3.14
-  };
-}</code></pre><br>
-<h4>4. <b>Built-in Functions</b></h4><p>The language provides a set of built-in functions that can be used to perform common operations. These functions are:</p><br>
-<ul></ul>
-<li><b>Arithmetic Operations:</b>
-<h3>Language Specification for <b>microwave.Json</b></h3><br>
-<h4>1. <b>Syntax Rules</b></h4><p>The syntax of <b>microwave.Json</b> follows a clear structure defined by strict formatting and rule sets. Each statement in the language adheres to the following general format:</p><br>
-<ul>
-<li><b>Statements:</b> Must end with a semicolon (<code>;</code>).</li>
-<li><b>Blocks:</b> Blocks are enclosed by curly braces <code>{}</code>.</li>
-<li><b>Indentation:</b> Indentation is not mandatory but strongly recommended for clarity.</li>
-<li><b>Comments:</b> Single-line comments start with <code>//</code>, while multi-line comments are enclosed in <code>/* */</code>.</li>
-</ul><br>
-<h5>Syntax Example:</h5><pre><code>// Single-line comment
-{
-  operation: "add"; // Block start
-  num1: 3;
-  num2: 5;
-  result: 0;
-  // Call operation
-  result = add(num1, num2);
-}</code></pre><br>
-<h4>2. <b>Semantics of Operations and Commands</b></h4><p>Operations in <b>toaster.Json</b> are built on a functional paradigm with state transformations being explicit. All operations consist of a source, a command, and an optional result. The language ensures that side effects are minimized by default, making state changes explicit within blocks.</p><br>
-<h5>Example of Operation Semantics:</h5><pre><code>{
-  input: 4;
-  factor: 3;
-  output: 0;
-  output = multiply(input, factor); // Semantically pure operation
-}</code></pre><br>    <h4>1. <b>Syntax and Structure</b></h4><p>The syntax of <b>Pop 'n' Fresh</b> follows a clear structure defined by strict formatting and rule sets. Each statement in the language adheres to the following general format:</p><br>    <ul>    <li><b>Statements:</b> Must end with a semicolon (<code>;</code>).</li>    <li><b>Blocks:</b> Blocks are enclosed by curly braces <code>{}</code>.</li>    <li><b>Indentation:</b> Indentation is not mandatory but strongly recommended for clarity.</li>    <li><b>Comments:</b> Single-line comments start with <code>//</code>, while multi-line comments are enclosed in <code>/* */</code>.</li>    </ul><br>    <h5>Syntax Example:</h5><pre><code>// Single-line comment    
-    {
-      operation: "add"; // Block start
-      num1: 3;
-      num2: 5;
-      result: 0;
-      // Call operation
-      result = add(num1, num2);
-    }</code></pre><br>    <h4>2. <b>Semantics of Operations and Commands</b></h4><p>Operations in <b>toaster.Json</b> are built on a functional paradigm with state transformations being explicit. All operations consist of a source, a command, and an optional result. The language ensures that side effects are minimized by default, making state changes explicit within blocks.</p><br>    <h5>Example of Operation Semantics:</h5><pre><code>{
-      input: 4;
-      factor: 3;
-      output: 0;
-      output = multiply(input, factor); // Semantically pure operation
-    }</code></pre>      
-<h4>1. <b>Syntax Rules</b></h4><p>The syntax of <b>toaster.Json</b> follows a clear structure defined by strict formatting and rule sets. Each statement in the language adheres to the following general format:</p><br>
-<ul>
-<li><b>Statements:</b> Must end with a semicolon (<code>;</code>).</li>
-<li><b>Blocks:</b> Blocks are enclosed by curly braces <code>{}</code>.</li>
-<li><b>Indentation:</b> Indentation is not mandatory but strongly recommended for clarity.</li>
-<li><b>Comments:</b> Single-line comments start with <code>//</code>, while multi-line comments are enclosed in <code>/* */</code>.</li>
-</ul><br>
-<h5>Syntax Example:</h5><pre><code>// Single-line comment
-{
-  operation: "add"; // Block start
-  num1: 3;
-  num2: 5;
-  result: 0;
-  // Call operation
-  result = add(num1, num2);
-}
-</code></pre><br>
-<h4>2. <b>Semantics of Operations and Commands</b></h4><p>Operations in <b>toaster.Json</b> are built on a functional paradigm with state transformations being explicit. All operations consist of a source, a command, and an optional result. The language ensures that side effects are minimized by default, making state changes explicit within blocks.</p><br>
-<h5>Example of Operation Semantics:</h5><pre><code>{
-  input: 4;
-  factor: 3;
-  output: 0;
-  output = multiply(input, factor); // Semantically pure operation
-}
-</code></pre><br>
-<ul>
-<li><b>Arithmetic Operations</b> such as <code>add()</code>, <code>subtract()</code>, <code>multiply()</code>, and <code>divide()</code> follow traditional semantics.</li>
-<li><b>Assignment Operations</b> such as <code>x = y;</code> assign the value of <code>y</code> to <code>x</code>.</li>
-</ul><br>
-<h4>3. <b>Supported Data Types and Structures</b></h4><p>The language supports the following primitive data types and composite structures:</p><br>
-<ul>
-<li><b>Primitives:</b>
-<ul>
-<li><code>int</code>: Represents integer numbers.</li>
-<li><code>float</code>: Represents floating-point numbers.</li>
-<li><code>string</code>: A sequence of characters.</li>
-<li><code>bool</code>: Represents boolean values (<code>true</code> or <code>false</code>).</li>
-</ul>
-<br></li>
-<li><b>Composite Types:</b>
-<ul>
-<li><b>Array:</b> Denoted by square brackets, <code>[ ]</code>, and can hold multiple values of any type.</li>
-<li><b>Object:</b> Denoted by curly braces <code>{}</code>, these are key-value pairs where the key is a string and the value can be of any type.</li>
-</ul>
-</li>
-</ul><br>
-<h5>Interaction Example:</h5><pre><code>{
-  arr: [1, 2, 3, 4];
-  obj: { name: "Bob", age: 25 };
-  x: 5;
-  y: "Alice";
-  boolFlag: true;
-}
-</code></pre><br>
-<h4>4. <b>Operations, Functions, Constants, Modifiers, Categories, and Variables</b></h4><br>
-<h5><b>Operations</b>:</h5><p>Operations are predefined commands that manipulate data and return results.</p><ul>
-<li><code>add(x, y)</code>: Adds two numbers.</li>
-<li><code>subtract(x, y)</code>: Subtracts <code>y</code> from <code>x</code>.</li>
-<li><code>multiply(x, y)</code>: Multiplies two numbers.</li>
-<li><code>divide(x, y)</code>: Divides <code>x</code> by <code>y</code> (raises an error if <code>y</code> is 0).</li>
-</ul><br>
-<h5><b>Functions</b>:</h5><p>Functions are user-defined commands that take input parameters, perform operations, and return results. Functions must be explicitly defined and invoked.</p><br>
-<pre><code>function addTwoNumbers(a, b) {
-  return add(a, b);
-}
-
-result = addTwoNumbers(2, 3);
-</code></pre><br>
-<h5><b>Constants</b>:</h5><p>Constants are fixed values that cannot be altered once declared. They are denoted by the <code>const</code> keyword.</p><pre><code>const PI = 3.14159;
-</code></pre><br>
-<h5><b>Modifiers</b>:</h5><p>Modifiers alter the behavior or scope of variables and operations. <b>toaster.Json</b> includes the following modifiers:</p><ul>
-<li><code>mutable</code>: Indicates that a variable can be changed.</li>
-<li><code>immutable</code>: Forces a variable to remain constant after its initial assignment.</li>
-</ul><br>
-<h5><b>Categories</b>:</h5><p>Variables in <b>toaster.Json</b> are categorized based on scope:</p><ul>
-<li><b>Global</b>: Accessible throughout the program.</li>
-<li><b>Local</b>: Only accessible within a block or function.</li>
-</ul><br>
-<pre><code>global x = 10;
-function example() {
-  local y = 5;
-  return add(x, y);
-}
-</code></pre><br>
-<h4>5. <b>Error Handling</b></h4><p>Errors in <b>toaster.Json</b> are managed using the <code>try-catch</code> mechanism. Whenever a potential error might occur, the <code>try</code> block is used to attempt execution, and any errors are caught in the <code>catch</code> block.</p><br>
-<pre><code>try {
-  result = divide(10, 0);
-} catch (error) {
-  log("Error occurred: ", error);
-}
-</code></pre><br>
-<h4>6. <b>Grammar and Formal Rules for Combining Elements</b></h4><ul>
-<li><b>Function Calls:</b> Functions must be invoked with parentheses <code>()</code> containing arguments.</li>
-<li><b>Assignment:</b> Variable assignment is done using <code>=</code> and the type is inferred from the value.</li>
-<li><b>Control Flow:</b> Conditional statements (<code>if</code>, <code>else</code>) and loops (<code>while</code>, <code>for</code>) follow the traditional C-like grammar.</li>
-</ul><br>
-<h5>Formal Example:</h5><pre><code>{
-  x: 5;
-  y: 10;
-  
-  if (x &lt; y) {
-    z = add(x, y);
-  } else {
-    z = subtract(y, x);
-  }
-}
-</code></pre><br>
-<h4>7. <b>Language-Specific Utilities and Standard Libraries</b></h4><p><b>toaster.Json</b> comes with a set of standard utilities and libraries to perform common tasks, such as math operations, string manipulations, and array operations.</p><br>
-<h5><b>Standard Library Functions:</b></h5><ul>
-<li><b>Math:</b> <code>sqrt(x)</code>, <code>pow(base, exponent)</code></li>
-<li><b>String:</b> <code>length(string)</code>, <code>concat(string1, string2)</code></li>
-<li><b>Array:</b> <code>push(array, element)</code>, <code>pop(array)</code></li>
-</ul><br>
-<h4>8. <b>Compiler-Specific Behavior for toaster.Json</b></h4><p>The <b>toaster.Json</b> compiler interprets and translates source code into executable bytecode. The compiler includes the following steps:</p><ol>
-<li><b>Lexical Analysis</b>: Tokenizes the source code.</li>
-<li><b>Syntax Analysis</b>: Ensures code follows syntax rules.</li>
-<li><b>Semantic Analysis</b>: Ensures operations are semantically valid.</li>
-<li><b>Optimization</b>: Optimizes the code for performance.</li>
-<li><b>Bytecode Generation</b>: Translates the code into machine-readable bytecode.</li>
-</ol><br>
-<p>The <b>toaster.Json</b> compiler automatically manages memory and handles garbage collection.</p><br>
-<h4>9. <b>List of Functions, Operations, and Modifiers</b></h4><br>
-<h5><b>Functions:</b></h5><ul>
-<li><code>add(x, y)</code></li>
-<li><code>subtract(x, y)</code></li>
-<li><code>multiply(x, y)</code></li>
-<li><code>divide(x, y)</code></li>
-<li><code>sqrt(x)</code></li>
-<li><code>pow(base, exponent)</code></li>
-</ul><br>
-<h5><b>Operations:</b></h5><ul>
-<li>Arithmetic: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
-<li>Logical: <code>&&</code>, <code>||</code>, <code>!</code></li>
-<li>Comparison: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></li>
-</ul><br>
-<h5><b>Modifiers:</b></h5><ul>
-<li><code>mutable</code></li>
-<li><code>immutable</code></li>
-<li><code>global</code></li>
-<li><code>local</code></li>
-</ul><br>
-<h3>Bob and Alice Example:</h3><br>
-<pre><code>{
-  // Bob calculates his total balance
-  bobBalance: 100;
-  addAmount: 50;
-  bobBalance = add(bobBalance, addAmount);
-
-  // Alice checks if her balance is enough
-  aliceBalance: 75;
-  if (aliceBalance &gt;= 100) {
-    log("Alice has enough balance.");
-  } else {
-    log("Alice needs more funds.");
-  }
-}
-</code></pre><br>
-<h3>Proof Example Using Pop 'n' Fresh Commands:</h3><ul>
-<li><b>Arithmetic Proof:</b>
-<ul>
-<li><code>A + B = C</code> can be formally represented as <code>Pop A B add -&gt; C</code>.</li>
-</ul>
-</li>
-</ul><br>
-<h3>Pop 'n' Fresh Language Specification (Version 1.0)</h3><br>
-<h4>1. <b>Syntax and Structure</b></h4><br>
-<h5>1.1 <b>Basic Elements</b></h5><ul>
-<li><b>IDENTIFIER</b>: <code>[a-zA-Z_][a-zA-Z0-9_]*</code></li>
-<li><b>NUMBER</b>: <code>[0-9]+(\.[0-9]+)?</code></li>
-<li><b>STRING</b>: <code>"[^"]*"</code></li>
-</ul><br>
-<h5>1.2 <b>Operators</b></h5><ul>
-<li><b>Arithmetic</b>: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code></li>
-<li><b>Comparison</b>: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
-<li><b>Logical</b>: <code>&&</code>, <code>||</code>, <code>!</code></li>
-<li><b>Assignment</b>: <code>:=</code></li>
-</ul><br>
-<h5>1.3 <b>Delimiters</b></h5><ul>
-<li><b>Parentheses</b>: <code>()</code></li>
-<li><b>Braces</b>: <code>{}</code></li>
-<li><b>Brackets</b>: <code>[]</code></li>
-<li><b>Angle Brackets</b>: <code>&lt;&gt;</code></li>
-</ul><br>
-<h5>1.4 <b>Keywords</b></h5><ul>
-<li><code>DEF</code>, <code>IF</code>, <code>ELSE</code>, <code>LOOP</code>, <code>BREAK</code>, <code>CONTINUE</code>, <code>RETURN</code>, <code>TRY</code>, <code>CATCH</code>, <code>THROW</code>, <code>ASSERT</code></li>
-</ul><br>
-<h5>1.5 <b>Comments</b></h5><ul>
-<li><b>Single-line</b>: <code>// comment</code></li>
-<li><b>Multi-line</b>: <code>/* comment */</code></li>
-</ul><br>
-<h4>2. <b>Data Types</b></h4><br>
-<h5>2.1 <b>Primitive Types</b></h5><ul>
-<li><b>INT</b>: Integer</li>
-<li><b>FLD</b>: Field element</li>
-<li><b>BOOL</b>: Boolean</li>
-<li><b>STR</b>: String</li>
-</ul><br>
-<h5>2.2 <b>Cryptographic Types</b></h5><ul>
-<li><b>H256</b>: 256-bit hash</li>
-<li><b>PK</b>: Public key</li>
-<li><b>SK</b>: Secret key</li>
-<li><b>SIG</b>: Signature</li>
-<li><b>COMM</b>: Commitment</li>
-</ul><br>
-<h5>2.3 <b>Complex Types</b></h5><ul>
-<li><b>VEC<T></b>: Vector of type <code>T</code></li>
-<li><b>MAP<K,V></b>: Map with key type <code>K</code> and value type <code>V</code></li>
-<li><b>OPT<T></b>: Optional value of type <code>T</code></li>
-</ul><br>
-<h5>2.4 <b>Circuit-Specific Types</b></h5><ul>
-<li><b>GATE</b>: Circuit gate</li>
-<li><b>WIRE</b>: Circuit wire</li>
-<li><b>CONSTRAINT</b>: Circuit constraint</li>
-</ul><br>
-<h4>3. <b>Functions and Control Flow</b></h4><br>
-<h5>3.1 <b>Function Definition</b></h5><pre><code>FUNC_NAME(param1:TYPE, param2:TYPE) -&gt; RETURN_TYPE {
-  // function body
-}
-</code></pre><br>
-<h5>3.2 <b>Control Structures</b></h5><br>
-<ul>
-<li><b>If-Else</b>:</li>
-</ul><pre><code>IF (condition) {
-  // code
-} ELSE {
-  // code
-}
-</code></pre><br>
-<ul>
-<li><b>Loops</b>:</li>
-</ul><pre><code>LOOP {
-  // code
-  IF (condition) BREAK
-}
-</code></pre><br>
-<ul>
-<li><b>Try-Catch</b>:</li>
-</ul><pre><code>TRY {
-  // code
-} CATCH (error_type) {
-  // error handling
-}
-</code></pre><br>
-<h4>4. <b>Cryptographic Operations</b></h4><br>
-<h5>4.1 <b>Hashing</b></h5><pre><code>HASH(data:VEC&lt;INT&gt;) -&gt; H256
-</code></pre><br>
-<h5>4.2 <b>Signatures</b></h5><pre><code>SIGN(sk:SK, msg:VEC&lt;INT&gt;) -&gt; SIG
-VERIFY(pk:PK, msg:VEC&lt;INT&gt;, sig:SIG) -&gt; BOOL
-</code></pre><br>
-<h5>4.3 <b>Encryption</b></h5><pre><code>ENC(pk:PK, msg:VEC&lt;INT&gt;) -&gt; VEC&lt;INT&gt;
-DEC(sk:SK, cipher:VEC&lt;INT&gt;) -&gt; VEC&lt;INT&gt;
-</code></pre><br>
-<h5>4.4 <b>Zero-Knowledge Proofs</b></h5><pre><code>ZKP_GEN(circuit:VEC&lt;CONSTRAINT&gt;, witness:VEC&lt;FLD&gt;) -&gt; PROOF
-ZKP_VERIFY(circuit:VEC&lt;CONSTRAINT&gt;, proof:PROOF, public_input:VEC&lt;FLD&gt;) -&gt; BOOL
-</code></pre><br>
-<h5>4.5 <b>Commitments</b></h5><pre><code>COMM_GEN(value:FLD, randomness:FLD) -&gt; COMM
-COMM_OPEN(comm:COMM, value:FLD, randomness:FLD) -&gt; BOOL
-</code></pre><br>
-<h5>4.6 <b>Lattice-Based Cryptography</b></h5><pre><code>LWE_SAMPLE(s:VEC&lt;FLD&gt;, e:VEC&lt;FLD&gt;) -&gt; VEC&lt;FLD&gt;
-LWE_DECODE(c:VEC&lt;FLD&gt;, s:VEC&lt;FLD&gt;) -&gt; FLD
-</code></pre><br>
-<h5>4.7 <b>Witness Encryption</b></h5><pre><code>WE_ENC(stmt:STR, msg:VEC&lt;INT&gt;) -&gt; VEC&lt;INT&gt;
-WE_DEC(ct:VEC&lt;INT&gt;, witness:VEC&lt;FLD&gt;) -&gt; OPT&lt;VEC&lt;INT&gt;&gt;
-</code></pre><br>
-<h5>4.8 <b>Verifiable Delay Functions</b></h5><pre><code>VDF_SETUP(security_parameter:INT) -&gt; VDF_PP
-VDF_EVAL(pp:VDF_PP, input:VEC&lt;INT&gt;, time:INT) -&gt; (VEC&lt;INT&gt;, PROOF)
-VDF_VERIFY(pp:VDF_PP, input:VEC&lt;INT&gt;, output:VEC&lt;INT&gt;, proof:PROOF) -&gt; BOOL
-</code></pre><br>
-<h4>5. <b>Circuit Operations</b></h4><br>
-<h5>5.1 <b>Circuit Construction</b></h5><pre><code>CIRCUIT_NEW() -&gt; CIRCUIT
+        <div class="section">
+            <h2>2. Data Types</h2>
+            <h3>2.1 Primitive Types</h3>
+            <ul>
+                <li><span class="command">INT</span>: Integer numbers</li>
+                <li><span class="command">FLD</span>: Field element</li>
+                <li><span class="command">BOOL</span>: Boolean values (<code>true</code> or <code>false</code>)</li>
+                <li><span class="command">STR</span>: String of characters</li>
+                    <div class="section">
+                        <h2>2. Data Types</h2>
+                        <h3>2.1 Primitive Types</h3>
+                        <ul>
+                            <li><span class="command">INT</span>: Integer numbers</li>
+                            <li><span class="command">FLD</span>: Field element</li>
+                            <li><span class="command">BOOL</span>: Boolean values (<code>true</code> or <code>false</code>)</li>
+                            <li><span class="command">STR</span>: String of characters</li>
+                        </ul>
+                        <h3>2.2 Complex Types</h3>
+                        <ul>
+                            <li><span class="command">VEC&lt;T&gt;</span>: Vector of type <code>T</code></li>
+                            <li><span class="command">MAP&lt;K,V&gt;</span>: Map with key type <code>K</code> and value type <code>V</code></li>
+                            <li><span class="command">OPT&lt;T&gt;</span>: Optional value of type <code>T</code></li>                            
+                        </ul>
+                        <h4>Example:</h4>
+                        <pre><code>{
+                            type: "VEC";
+                            elements: [1, 2, 3];
+                        }</code></pre>
+                        <pre><code>{
+                            type: "MAP";
+                            key: "name";
+                            value: "Bob";
+                        }</code></pre>
+                        <pre><code>{
+                            type: "OPT";
+                            value: "Hello, World!";
+                        }</code></pre>
+                        </div>
+                    
+                    <div class="section">
+                        <h2>3. Functions and Control Flow</h2>
+                        <h3>3.1 Function Definition</h3>
+                        <p>Functions are defined using the <code>FUNC</code> keyword, followed by the function name and a block of code enclosed in curly braces. The function returns a result of type <code>RETURN_TYPE</code>.</p>
+                        <h4>Example:</h4>
+                        <pre><code>FUNC add(x, y) {
+                            RETURN x + y;
+                        }</code></pre>
+                    </div>                    
+                    
+                    <div class="section"></div>
+                        <h2>4. Built-in Functions</h2>
+                        <p>The language provides a set of built-in functions that can be used to perform common operations. These functions are:</p>
+                        <ul>                
+                            <li><span class="command">add(int, int)</span>: Adds two integers.</li>
+                            <li><span class="command">subtract(int, int)</span>: Subtracts two integers.</li>
+                            <li><span class="command">multiply(int, int)</span>: Multiplies two integers.</li>
+                            <li><span class="command">divide(int, int)</span>: Divides two integers.</li>
+                                </ul>   
+                                <h4>Example:</h4>
+                                <pre><code>{
+                                result = add(5, 10);
+                            }</code></pre>
+                            </div>
+  <h5>5.1 <b>Circuit Construction</b></h5><pre><code>CIRCUIT_NEW() -&gt; CIRCUIT
 CIRCUIT_ADD_GATE(circuit:CIRCUIT, gate:GATE) -&gt; CIRCUIT
 CIRCUIT_CONNECT(circuit:CIRCUIT, wire1:WIRE, wire2:WIRE) -&gt; CIRCUIT
 </code></pre><br>
@@ -1327,13 +1109,15 @@ result := THREAD_JOIN(thread);
 <hr><br>
 <h3>Visual Output Specification to Match the Programming Logic</h3><br>
 <h4>1. <b>Syntax and Structure</b></h4><br>
-<h5>1.1 <b>Component Box Representation</b></h5><p>Visual representation of programming components such as functions, variables, and expressions:</p><pre><code>╔═════════════════════════════════════╗
+<h5>1.1 <b>Component Box Representation</b></h5><p>Visual representation of programming components such as functions, variables, and expressions:</p><pre><code>
+╔═════════════════════════════════════╗
 ║ Component Name                      ║
 ╚═════════════════════════════════════╝
 </code></pre><ul>
 <li><b>Purpose</b>: This box visually encloses any logical operation or function.</li>
 <li><b>Example</b>: Representing a function call visually.</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ add(5, 10)           ║
 ╚══════════════════════╝
 </code></pre><br>
@@ -1341,7 +1125,8 @@ result := THREAD_JOIN(thread);
 </code></pre><ul>
 <li><b>Purpose</b>: Indicates data movement from one part of the system to another.</li>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ add(5, 10)           ║         ║ result: 15           ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
@@ -1349,12 +1134,14 @@ result := THREAD_JOIN(thread);
 </code></pre><ul>
 <li><b>Purpose</b>: Represents the assignment of a value to a variable.</li>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════╗
+</ul><pre><code>
+╔════════════════════════╗
 ║ x := 5                 ║
 ╚════════════════════════╝
 </code></pre><br>
 <h4>2. <b>Data Types and Structures</b></h4><br>
-<h5>2.1 <b>Primitive Types Box</b></h5><p>Each data type will be encapsulated in a separate box:</p><pre><code>╔══════════════════════╗
+<h5>2.1 <b>Primitive Types Box</b></h5><p>Each data type will be encapsulated in a separate box:</p><pre><code>
+╔══════════════════════╗
 ║ INT                  ║
 ╚══════════════════════╝
 ╔══════════════════════╗
@@ -1362,60 +1149,68 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔═════════════╗        ╔═════════════╗
+</ul><pre><code>
+╔═════════════╗        ╔═════════════╗
 ║ x: INT      ║  ──▶   ║ y: STR      ║
 ╚═════════════╝        ╚═════════════╝
 </code></pre><br>
-<h5>2.2 <b>Complex Types Visualization</b></h5><p>Visual output for structures like VEC and MAP.</p><pre><code>╔════════════════════════════╗
-║ VEC&lt;INT&gt;                   ║
+<h5>2.2 <b>Complex Types Visualization</b></h5><p>Visual output for structures like VEC and MAP.</p><pre><code>
+╔════════════════════════════╗
+║ VEC&lt;INT&gt;             ║
 ║ ────────────               ║
 ║ [1, 2, 3]                  ║
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ MAP&lt;STR, INT&gt;              ║         ║ VEC&lt;INT&gt;                   ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ MAP&lt;STR, INT&gt;        ║         ║ VEC&lt;INT&gt;             ║
 ║ ────────────               ║         ║ ────────────               ║
 ║ { "age" : 30 }             ║         ║ [1, 2, 3]                  ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>3. <b>Functions and Control Flow</b></h4><br>
-<h5>3.1 <b>Function Definition</b></h5><p>Each function is represented visually with input/output flows.</p><pre><code>╔══════════════════════╗
+<h5>3.1 <b>Function Definition</b></h5><p>Each function is represented visually with input/output flows.</p><pre><code>
+╔══════════════════════╗
 ║ FUNC add(x, y)       ║
 ║ ───────────────      ║
 ║ RETURN x + y         ║
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ FUNC add(x, y)       ║         ║ RETURN x + y         ║
 ║ ───────────────      ║         ║ result := 15         ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
 <h5>3.2 <b>If-Else Control Flow</b></h5><p>Visual output for <code>IF-ELSE</code> structures.</p><br>
-<pre><code>╔══════════════════════╗
+<pre><code>
+╔══════════════════════╗
 ║ IF condition         ║
 ╚══════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
+   ┌────┴──────────┐
+   ▼               ▼
 ╔══════════╗  ╔══════════╗
 ║ True     ║  ║ False    ║
 ╚══════════╝  ╚══════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
-║ IF x &gt; 10            ║
+</ul><pre><code>
+╔══════════════════════╗
+║ IF x &gt; 10         ║
 ╚══════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
+   ┌────┴──────────────┐
+   ▼                   ▼
 ╔════════════╗   ╔════════════╗
 ║ x := x + 1 ║   ║ x := x - 1 ║
 ╚════════════╝   ╚════════════╝
 </code></pre><br>
 <h5>3.3 <b>Loop Structures</b></h5><p>Loops such as <code>FOR</code>, <code>WHILE</code>, and <code>LOOP</code> visualized as recurring operations.</p><br>
-<pre><code>╔══════════════════════╗
+<pre><code>
+╔══════════════════════╗
 ║ LOOP                 ║
 ║ ───────────────      ║
 ║ (i := 0 TO n)        ║
@@ -1429,7 +1224,8 @@ result := THREAD_JOIN(thread);
         └──▶ back to condition
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ LOOP (i := 0 TO 5)   ║
 ╚══════════════════════╝
         │
@@ -1441,7 +1237,8 @@ result := THREAD_JOIN(thread);
         └──▶ Repeat
 </code></pre><br>
 <h4>4. <b>Cryptographic Operations</b></h4><br>
-<h5>4.1 <b>Hashing</b></h5><p>Visualizing cryptographic operations like hashing.</p><pre><code>╔══════════════════════╗
+<h5>4.1 <b>Hashing</b></h5><p>Visualizing cryptographic operations like hashing.</p><pre><code>
+╔══════════════════════╗
 ║ HASH(input)          ║
 ╚══════════════════════╝
         │
@@ -1451,11 +1248,13 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ HASH("message")      ║         ║ H256: 123abc         ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
-<h5>4.2 <b>Signatures and Encryption</b></h5><pre><code>╔══════════════════════╗
+<h5>4.2 <b>Signatures and Encryption</b></h5><pre><code>
+╔══════════════════════╗
 ║ SIGN(sk, msg)        ║
 ╚══════════════════════╝
         │
@@ -1465,14 +1264,15 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ SIGN(sk, "data")     ║         ║ SIG: abc123          ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
 <h4>5. <b>Error Handling</b></h4><br>
-<h5>5.1 <b>Error Flow Representation</b></h5><p>Error handling is shown with catch paths and error outputs.</p><pre><code>╔══════════════════════╗
-║ TRY {                ║
-║   operation          ║
+<h5>5.1 <b>Error Flow Representation</b></h5><p>Error handling is shown with catch paths and error outputs.</p><pre><code>
+╔══════════════════════╗
+║   TRY {operation }   ║
 ╚══════════════════════╝
         │
         ▼
@@ -1481,7 +1281,8 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ TRY { x / 0 }        ║
 ╚══════════════════════╝
         │
@@ -1491,7 +1292,8 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><br>
 <h4>6. <b>Concurrency and Parallelism</b></h4><br>
-<h5>6.1 <b>Parallel Task Execution</b></h5><p>Visualizing parallel task execution with task flows.</p><pre><code>╔══════════════════════╗
+<h5>6.1 <b>Parallel Task Execution</b></h5><p>Visualizing parallel task execution with task flows.</p><pre><code>
+╔══════════════════════╗
 ║ PAR_EXEC(task_list)  ║
 ╚══════════════════════╝
         │
@@ -1501,11 +1303,13 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ PAR_EXEC([t1, t2])   ║         ║ results: [r1, r2]    ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
-<h5>6.2 <b>Synchronization and Locking</b></h5><pre><code>╔══════════════════════╗
+<h5>6.2 <b>Synchronization and Locking</b></h5><pre><code>
+╔══════════════════════╗
 ║ LOCK(mutex)          ║
 ╚══════════════════════╝
         │
@@ -1515,14 +1319,16 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ LOCK(mutex)          ║         ║ shared_resource += 1 ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
 <hr><br>
 <br>
 <h4>7. <b>Data Types and Structures (Continued)</b></h4><br>
-<h5>7.1 <b>Enumerations (Enums)</b></h5><p>Visual representation of enumerations (enums), showing the options available:</p><pre><code>╔══════════════════════╗
+<h5>7.1 <b>Enumerations (Enums)</b></h5><p>Visual representation of enumerations (enums), showing the options available:</p><pre><code>
+╔══════════════════════╗
 ║ ENUM Color           ║
 ║ ───────────────      ║
 ║ RED                  ║
@@ -1531,22 +1337,26 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ ENUM Color           ║         ║ current_color := RED ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
-<h5>7.2 <b>Tuples</b></h5><p>Tuples visualized as structured collections:</p><pre><code>╔══════════════════════╗
+<h5>7.2 <b>Tuples</b></h5><p>Tuples visualized as structured collections:</p><pre><code>
+╔══════════════════════╗
 ║ TUPLE                ║
 ║ ───────────────      ║
 ║ (INT, STR, BOOL)     ║
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔═════════════════════════╗   ──▶   ╔═════════════════════════╗
+</ul><pre><code>
+╔═════════════════════════╗   ──▶   ╔═════════════════════════╗
 ║ TUPLE (42, "Alice", T)  ║         ║ x := (42, "Alice", true)║
 ╚═════════════════════════╝         ╚═════════════════════════╝
 </code></pre><br>
-<h5>7.3 <b>Records</b></h5><p>Records (similar to structs) visually represented with fields and their values:</p><pre><code>╔══════════════════════╗
+<h5>7.3 <b>Records</b></h5><p>Records (similar to structs) visually represented with fields and their values:</p><pre><code>
+╔══════════════════════╗
 ║ RECORD Person        ║
 ║ ───────────────      ║
 ║ name: STR            ║
@@ -1554,29 +1364,34 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
-║ Person {             ║         ║ p := { "Bob", 30 }   ║
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════════╗
+║ Person {             ║         ║ p := { "Bob", 30 }       ║
 ║ name: "Bob",         ║         ║ name := "Bob", age := 30 ║
-║ age: 30              ║         ║                      ║
-╚══════════════════════╝         ╚══════════════════════╝
+║ age: 30  }           ║         ║                          ║
+╚══════════════════════╝         ╚══════════════════════════╝
 </code></pre><br>
 <h4>8. <b>Function Handling and Advanced Operations</b></h4><br>
-<h5>8.1 <b>Function Overloading</b></h5><p>Visualizing multiple functions with the same name but different parameters.</p><pre><code>╔══════════════════════╗
+<h5>8.1 <b>Function Overloading</b></h5><p>Visualizing multiple functions with the same name but different parameters.</p><pre><code>
+╔══════════════════════╗
 ║ FUNC add(x:INT)      ║
 ╚══════════════════════╝
-╔══════════════════════╗
-║ FUNC add(x:INT, y:INT)║
-╚══════════════════════╝
+╔════════════════════════╗
+║ FUNC add(x:INT, y:INT) ║
+╚════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ add(5)               ║         ║ result := 6          ║
 ╚══════════════════════╝         ╚══════════════════════╝
-</code></pre><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</code></pre><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ add(5, 3)            ║         ║ result := 8          ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
-<h5>8.2 <b>Closures and Lambdas</b></h5><p>Visualizing anonymous and closure functions:</p><pre><code>╔══════════════════════╗
+<h5>8.2 <b>Closures and Lambdas</b></h5><p>Visualizing anonymous and closure functions:</p><pre><code>
+╔══════════════════════╗
 ║ CLOSURE make_adder   ║
 ║ ───────────────      ║
 ║ factor: INT          ║
@@ -1584,17 +1399,19 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════╗   ──▶   ╔════════════════════════╗
+</ul><pre><code>
+╔════════════════════════╗   ──▶   ╔════════════════════════╗
 ║ CLOSURE multiplier(2)  ║         ║ double := FUNC (x) {x*2}║
 ╚════════════════════════╝         ╚════════════════════════╝
 </code></pre><br>
 <h5>8.3 <b>Pattern Matching</b></h5><p>Flow for <code>MATCH</code> statements represented visually:</p><br>
-<pre><code>╔══════════════════════╗
+<pre><code>
+╔══════════════════════╗
 ║ MATCH expr           ║
 ╚══════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
+   ┌────┴─────────┐
+   ▼              ▼
 ╔══════════╗  ╔══════════╗
 ║ CASE 1   ║  ║ CASE 2   ║
 ╚══════════╝  ╚══════════╝
@@ -1606,40 +1423,44 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ MATCH [1, 2, 3]      ║
 ╚══════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
-╔══════════╗  ╔══════════╗
-║ CASE [1,2,3] MATCHED!  ║
-╚══════════╝
+   ┌────┴──────────┐
+   ▼               ▼
+╔═════════════╗  ╔══════════╗
+║ CASE [1,2,3]║  ║ MATCHED! ║
+╚═════════════╝  ╚══════════╝
 </code></pre><br>
 <h4>9. <b>Error Handling</b></h4><br>
-<h5>9.1 <b>Chained Error Handling</b></h5><p>Flow for catching multiple error types:</p><pre><code>╔══════════════════════╗
+<h5>9.1 <b>Chained Error Handling</b></h5><p>Flow for catching multiple error types:</p><pre><code>
+╔══════════════════════╗
 ║ TRY { operation }    ║
 ╚══════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴───────────────┐
+   ▼                    ▼
 ╔════════════╗   ╔════════════╗
 ║ CATCH 1    ║   ║ CATCH 2    ║
 ╚════════════╝   ╚════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ TRY { divide(10, 0) }║
 ╚══════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
-╔════════════╗   ╔════════════╗
-║ CATCH(DivBy0)  ║ DEBUG PRINT ║
-╚════════════╝
+   ┌────┴─────────────────┐
+   ▼                      ▼
+╔═══════════════╗   ╔═════════════╗
+║ CATCH(DivBy0) ║   ║ DEBUG PRINT ║
+╚═══════════════╝   ╚═════════════╝
 </code></pre><br>
 <h4>10. <b>Concurrency and Synchronization</b></h4><br>
-<h5>10.1 <b>Thread Management</b></h5><p>Flow for threads:</p><pre><code>╔══════════════════════╗
+<h5>10.1 <b>Thread Management</b></h5><p>Flow for threads:</p><pre><code>
+╔══════════════════════╗
 ║ THREAD_START(func)   ║
 ╚══════════════════════╝
         │
@@ -1649,11 +1470,13 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ THREAD_START(worker) ║         ║ THREAD_ID: 1001      ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
-<h5>10.2 <b>Synchronization Primitives</b></h5><p>Visual flow for using locks:</p><pre><code>╔══════════════════════╗
+<h5>10.2 <b>Synchronization Primitives</b></h5><p>Visual flow for using locks:</p><pre><code>
+╔══════════════════════╗
 ║ LOCK(mutex)          ║
 ╚══════════════════════╝
         │
@@ -1663,12 +1486,14 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗   ──▶   ╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗   ──▶   ╔══════════════════════╗
 ║ LOCK(resource_mutex) ║         ║ shared += 1          ║
 ╚══════════════════════╝         ╚══════════════════════╝
 </code></pre><br>
 <h4>11. <b>Coroutines and Asynchronous Handling</b></h4><br>
-<h5>11.1 <b>Coroutine Execution Flow</b></h5><p>Flow for coroutine yield and resumption:</p><pre><code>╔══════════════════════╗
+<h5>11.1 <b>Coroutine Execution Flow</b></h5><p>Flow for coroutine yield and resumption:</p><pre><code>
+╔══════════════════════╗
 ║ COROUTINE(func)      ║
 ╚══════════════════════╝
         │
@@ -1680,7 +1505,8 @@ result := THREAD_JOIN(thread);
         └──▶ Resume
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔══════════════════════╗
+</ul><pre><code>
+╔══════════════════════╗
 ║ COROUTINE producer() ║
 ╚══════════════════════╝
         │
@@ -1693,47 +1519,54 @@ result := THREAD_JOIN(thread);
 <br>
 <h3>Continuing the Visual Output Specification</h3><br>
 <h4>12. <b>Data Structures and Complex Types (Continued)</b></h4><br>
-<h5>12.1 <b>Vectors</b></h5><p>Vectors are visualized as ordered collections.</p><pre><code>╔════════════════════════════╗
-║ VEC&lt;INT&gt;                   ║
+<h5>12.1 <b>Vectors</b></h5><p>Vectors are visualized as ordered collections.</p><pre><code>
+╔════════════════════════════╗
+║ VEC&lt;INT&gt;             ║
 ║ ────────────               ║
 ║ [1, 2, 3, 4]               ║
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ VEC&lt;STR&gt;                   ║         ║ VEC: ["apple", "banana"]   ║
-║ ────────────               ║         ║                           ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ VEC&lt;STR&gt;             ║         ║  VEC: ["apple", "banana"]  ║
+║ ────────────               ║         ║                            ║
 ║ ["apple", "banana"]        ║         ╚════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
-<h5>12.2 <b>Maps</b></h5><p>Maps show key-value pairs with keys pointing to their corresponding values.</p><pre><code>╔════════════════════════════╗
-║ MAP&lt;STR, INT&gt;              ║
+<h5>12.2 <b>Maps</b></h5><p>Maps show key-value pairs with keys pointing to their corresponding values.</p><pre><code>
+╔════════════════════════════╗
+║ MAP&lt;STR, INT&gt;        ║
 ║ ────────────               ║
 ║ {"age": 30, "year": 2024}  ║
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ MAP&lt;STR, INT&gt;              ║         ║ MAP: {"age": 30, "year": 24}║
-║ ────────────               ║         ║                           ║
-║ {"age": 30, "year": 24}    ║         ╚════════════════════════════╝
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔══════════════════════════════╗
+║ MAP&lt;STR, INT&gt;        ║         ║ MAP: {"age": 30, "year": 24} ║
+║ ────────────               ║         ║                              ║
+║ {"age": 30, "year": 24}    ║         ╚══════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
-<h5>12.3 <b>Optional Values</b></h5><p>Optionals are displayed visually as boxed values that can be present or absent (null).</p><pre><code>╔════════════════════════════╗
-║ OPT&lt;INT&gt;                   ║
+<h5>12.3 <b>Optional Values</b></h5><p>Optionals are displayed visually as boxed values that can be present or absent (null).</p><pre><code>
+╔════════════════════════════╗
+║ OPT&lt;INT&gt;             ║
 ║ ────────────               ║
 ║ Present: 5                 ║
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ OPT&lt;INT&gt;                   ║         ║ OPT&lt;INT&gt;: None             ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ OPT&lt;INT&gt;             ║         ║ OPT&lt;INT&gt;: None       ║
 ║ ────────────               ║         ╚════════════════════════════╝
 ║ Value: 5                   ║
 ╚════════════════════════════╝
 </code></pre><br>
 <h4>13. <b>Cryptographic Operations (Continued)</b></h4><br>
-<h5>13.1 <b>Hashing Functions</b></h5><p>Hashing operations visually demonstrate the transformation of data to hash.</p><pre><code>╔════════════════════════════╗
+<h5>13.1 <b>Hashing Functions</b></h5><p>Hashing operations visually demonstrate the transformation of data to hash.</p><pre><code>
+╔════════════════════════════╗
 ║ HASH(data)                 ║
 ╚════════════════════════════╝
         │
@@ -1743,7 +1576,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ HASH("message")            ║         ║ H256: 123abc               ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
@@ -1757,7 +1591,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SIGN(private_key, "data")  ║         ║ SIG: 0x45abc               ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
@@ -1769,7 +1604,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ CIPHER: 0xdef456           ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ DEC(sk, cipher)            ║
 ╚════════════════════════════╝
         │
@@ -1779,7 +1615,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ ENC(public_key, "secret")  ║         ║ CIPHER: 0x789xyz           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
@@ -1793,28 +1630,32 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ ZKP_GEN(circuit, inputs)   ║         ║ PROOF: zk_abc123           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>14. <b>Control Flow and Logic (Continued)</b></h4><br>
 <h5>14.1 <b>Try-Catch Blocks</b></h5><p>Visualizing error handling using <code>TRY</code> and <code>CATCH</code>.</p><br>
-<pre><code>╔════════════════════════════╗
+<pre><code>
+╔════════════════════════════╗
 ║ TRY { operation }          ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴──────────────┐
+   ▼                   ▼
 ╔════════════╗   ╔════════════╗
 ║ Success    ║   ║ CATCH error║
 ╚════════════╝   ╚════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ TRY { x := divide(10, 0) } ║         ║ CATCH(DivByZero)            ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ TRY { x := divide(10, 0) } ║         ║ CATCH(DivByZero)           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>14.2 <b>Assertions</b></h5><p>Assertions are visually represented as checks that must hold true.</p><pre><code>╔════════════════════════════╗
+<h5>14.2 <b>Assertions</b></h5><p>Assertions are visually represented as checks that must hold true.</p><pre><code>
+╔════════════════════════════╗
 ║ ASSERT(condition, msg)     ║
 ╚════════════════════════════╝
         │
@@ -1825,17 +1666,19 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔══════════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ ASSERT(x &gt; 0, "x must &gt; 0")║         ║ TRUE: Continue execution   ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+╚══════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>15. <b>Parallelism and Concurrency (Continued)</b></h4><br>
-<h5>15.1 <b>Parallel Execution</b></h5><p>Parallel execution flows show tasks running simultaneously and collecting results.</p><pre><code>╔════════════════════════════╗
+<h5>15.1 <b>Parallel Execution</b></h5><p>Parallel execution flows show tasks running simultaneously and collecting results.</p><pre><code>
+╔════════════════════════════╗
 ║ PAR_EXEC(task_list)        ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴──────────────┐
+   ▼                   ▼
 ╔════════════╗   ╔════════════╗
 ║ Task 1     ║   ║ Task 2     ║
 ╚════════════╝   ╚════════════╝
@@ -1846,11 +1689,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ PAR_EXEC([t1, t2])         ║         ║ Results: [output1, output2]║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>15.2 <b>Thread Management</b></h5><p>Threads are visualized with a start and join process.</p><pre><code>╔════════════════════════════╗
+<h5>15.2 <b>Thread Management</b></h5><p>Threads are visualized with a start and join process.</p><pre><code>
+╔════════════════════════════╗
 ║ THREAD_START(func)         ║
 ╚════════════════════════════╝
         │
@@ -1870,7 +1715,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ THREAD_START(worker)       ║         ║ THREAD_ID: 1001            ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │
@@ -1885,7 +1731,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ THREAD_START(task_worker)  ║         ║ THREAD_ID: 1012            ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
@@ -1895,7 +1742,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>16. <b>Synchronization and Locking</b></h4><br>
-<h5>16.1 <b>Mutex Lock and Unlock</b></h5><p>Visualizing a mutex locking mechanism to control concurrent access.</p><pre><code>╔════════════════════════════╗
+<h5>16.1 <b>Mutex Lock and Unlock</b></h5><p>Visualizing a mutex locking mechanism to control concurrent access.</p><pre><code>
+╔════════════════════════════╗
 ║ LOCK(mutex)                ║
 ╚════════════════════════════╝
         │
@@ -1910,8 +1758,9 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ LOCK(resource_mutex)        ║         ║ shared_resource += 1       ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ LOCK(resource_mutex)       ║         ║ shared_resource += 1       ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
         ▼                                    ▼
@@ -1932,7 +1781,8 @@ result := THREAD_JOIN(thread);
         └──▶ Resume
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ COROUTINE producer()       ║         ║ YIELD i (i:=0 to 5)        ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
@@ -1941,18 +1791,20 @@ result := THREAD_JOIN(thread);
 ║ Resume coroutine           ║         ║ YIELD next value: i=3      ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>17.2 <b>Awaiting Future Results</b></h5><p>Visualizing asynchronous function calls and awaiting results.</p><pre><code>╔════════════════════════════╗
+<h5>17.2 <b>Awaiting Future Results</b></h5><p>Visualizing asynchronous function calls and awaiting results.</p><pre><code>
+╔════════════════════════════╗
 ║ ASYNC(func) -&gt; FUTURE&lt;T&gt;   ║
 ╚════════════════════════════╝
         │
         ▼
 ╔════════════════════════════╗
-║ AWAIT(future) -&gt; RESULT    ║
+║ AWAIT(future) -&gt; RESULT ║
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ ASYNC(fetch_data)          ║         ║ FUTURE&lt;INT&gt;: pending       ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ ASYNC(fetch_data)          ║         ║ FUTURE&lt;INT&gt;: pending ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
         ▼                                    ▼
@@ -1962,12 +1814,13 @@ result := THREAD_JOIN(thread);
 </code></pre><br>
 <h4>18. <b>Pattern Matching and Control Flow</b></h4><br>
 <h5>18.1 <b>Pattern Matching</b></h5><p>Visual output for <code>MATCH</code> statements with multiple cases.</p><br>
-<pre><code>╔════════════════════════════╗
+<pre><code>
+╔════════════════════════════╗
 ║ MATCH expression           ║
 ╚════════════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
+   ┌────┴────────────┐
+   ▼                 ▼
 ╔════════════╗  ╔════════════╗
 ║ CASE 1     ║  ║ CASE 2     ║
 ╚════════════╝  ╚════════════╝
@@ -1979,7 +1832,8 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ MATCH value                ║         ║ CASE [1, 2, 3]: Matched!   ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │
@@ -1989,12 +1843,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><br>
 <h5>18.2 <b>Conditional Expressions</b></h5><p><code>IF-ELSE</code> statements visually demonstrate conditional branching.</p><br>
-<pre><code>╔════════════════════════════╗
+<pre><code>
+╔════════════════════════════╗
 ║ IF condition               ║
 ╚════════════════════════════╝
         │
-   ┌────┴────┐
-   ▼         ▼
+   ┌────┴────────────┐
+   ▼                 ▼
 ╔════════════╗  ╔════════════╗
 ║ True       ║  ║ False      ║
 ╚════════════╝  ╚════════════╝
@@ -2006,8 +1861,9 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ IF (x &gt; 10)                ║         ║ x := x + 1                 ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ IF (x &gt; 10)             ║         ║ x := x + 1                 ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │
         ▼
@@ -2016,7 +1872,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>19. <b>Function Handling</b></h4><br>
-<h5>19.1 <b>Default Parameters and Function Overloading</b></h5><p>Visually representing function calls with optional or default parameters.</p><pre><code>╔════════════════════════════╗
+<h5>19.1 <b>Default Parameters and Function Overloading</b></h5><p>Visually representing function calls with optional or default parameters.</p><pre><code>
+╔════════════════════════════╗
 ║ FUNC greet(name, msg="Hi") ║
 ╚════════════════════════════╝
         │
@@ -2031,7 +1888,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ FUNC add(x, y=10)          ║         ║ CALL: add(5)               ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
@@ -2040,8 +1898,9 @@ result := THREAD_JOIN(thread);
 ║ Result: 15                 ║         ║ x + y = 15                 ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>19.2 <b>Lambda Functions and Closures</b></h5><p>Visually representing lambdas and closures.</p><pre><code>╔════════════════════════════╗
-║ LAMBDA (x, y) -&gt; x + y     ║
+<h5>19.2 <b>Lambda Functions and Closures</b></h5><p>Visually representing lambdas and closures.</p><pre><code>
+╔════════════════════════════╗
+║ LAMBDA (x, y) -&gt; x + y  ║
 ╚════════════════════════════╝
         │
         ▼
@@ -2055,12 +1914,14 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ LAMBDA (x) -&gt; x * factor   ║         ║ Result of closure: 20      ║
-╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+╚═══════════════════════════════╝         ╚════════════════════════════╝
+</code></pre><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ LAMBDA (x) -&gt; x * factor   ║         ║ CALL: closure(10)          ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+╚═══════════════════════════════╝         ╚════════════════════════════╝
         │                                    │
         ▼                                    ▼
 ╔════════════════════════════╗         ╔════════════════════════════╗
@@ -2068,9 +1929,10 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ FUNC make_multiplier(f)    ║         ║ Result: LAMBDA (x) -&gt; x * f║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔═════════════════════════════════╗
+║ FUNC make_multiplier(f)    ║         ║ Result: LAMBDA (x) -&gt; x * f  ║
+╚════════════════════════════╝         ╚═════════════════════════════════╝
         │                                    │
         ▼                                    ▼
 ╔════════════════════════════╗         ╔════════════════════════════╗
@@ -2079,11 +1941,12 @@ result := THREAD_JOIN(thread);
         │                                    │
         ▼                                    ▼
 ╔════════════════════════════╗         ╔════════════════════════════╗
-║ LAMBDA (x) -&gt; x * 2        ║         ║ Result: 20                 ║
+║ LAMBDA (x) -&gt; x * 2     ║         ║ Result: 20                 ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <p>This matches the lambda and closure concept by showing how the closure captures the <code>factor</code> from the outer scope, and then it visually demonstrates how calling the lambda works with captured values. The flow proceeds through the creation of the lambda, calling it, and returning the computed result.</p><br>
-<h5>20.1 <b>Custom Error Types</b></h5><p>Visual representation of defining and throwing custom errors.</p><pre><code>╔════════════════════════════╗
+<h5>20.1 <b>Custom Error Types</b></h5><p>Visual representation of defining and throwing custom errors.</p><pre><code>
+╔════════════════════════════╗
 ║ ERROR_TYPE(name, fields)   ║
 ╚════════════════════════════╝
         │
@@ -2093,17 +1956,19 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ ERROR_TYPE(InvalidInput,   ║         ║ THROW(InvalidInput("Wrong")║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ ERROR_TYPE(InvalidInput),  ║         ║ THROW(InvalidInput("Wrong")║
 ║ [(msg: STR)])              ║         ╚════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
-<h5>20.2 <b>Chained Error Handling</b></h5><p>Handling multiple error types with chained <code>TRY-CATCH</code>.</p><pre><code>╔════════════════════════════╗
+<h5>20.2 <b>Chained Error Handling</b></h5><p>Handling multiple error types with chained <code>TRY-CATCH</code>.</p><pre><code>
+╔════════════════════════════╗
 ║ TRY { operation }          ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴───────────────┐
+   ▼                    ▼
 ╔════════════╗   ╔════════════╗
 ║ CATCH 1    ║   ║ CATCH 2    ║
 ╚════════════╝   ╚════════════╝
@@ -2115,7 +1980,8 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ TRY { operation() }        ║         ║ CATCH(DivideByZero)        ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │
@@ -2125,7 +1991,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>21. <b>Advanced Programming Constructs (Continued)</b></h4><br>
-<h5>21.1 <b>Meta-Programming with Macros</b></h5><p>Macros visually generate code, simplifying repeated operations.</p><pre><code>╔════════════════════════════╗
+<h5>21.1 <b>Meta-Programming with Macros</b></h5><p>Macros visually generate code, simplifying repeated operations.</p><pre><code>
+╔════════════════════════════╗
 ║ macro MACRO_NAME(params)   ║
 ╚════════════════════════════╝
         │
@@ -2135,13 +2002,15 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ macro LOG(expr)            ║         ║ LOG(x + y) expands to:     ║
 ╚════════════════════════════╝         ║ DEBUG_PRINT(x + y)         ║
-                                        ║ RETURN (x + y)             ║
-                                        ╚════════════════════════════╝
+                                       ║ RETURN (x + y)             ║
+                                       ╚════════════════════════════╝
 </code></pre><br>
-<h5>21.2 <b>Type Inference</b></h5><p>Visual output showing how type inference works.</p><pre><code>╔════════════════════════════╗
+<h5>21.2 <b>Type Inference</b></h5><p>Visual output showing how type inference works.</p><pre><code>
+╔════════════════════════════╗
 ║ var_name := value          ║
 ╚════════════════════════════╝
         │
@@ -2151,17 +2020,19 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ x := 42                    ║         ║ Type inferred: INT         ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>22. <b>Concurrency and Parallelism (Continued)</b></h4><br>
-<h5>22.1 <b>Parallel Task Execution</b></h5><p>Visual representation of parallel task execution and result aggregation.</p><pre><code>╔════════════════════════════╗
+<h5>22.1 <b>Parallel Task Execution</b></h5><p>Visual representation of parallel task execution and result aggregation.</p><pre><code>
+╔════════════════════════════╗
 ║ PAR_EXEC(tasks)            ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴─────────────┐
+   ▼                  ▼
 ╔════════════╗   ╔════════════╗
 ║ Task 1     ║   ║ Task 2     ║
 ╚════════════╝   ╚════════════╝
@@ -2172,12 +2043,14 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ PAR_EXEC([download1,       ║         ║ Results: [file1, file2]     ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ PAR_EXEC([download1,       ║         ║ Results: [file1, file2]    ║
 ║ download2])                ║         ╚════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
-<h5>22.2 <b>Mutex Locks</b></h5><p>Visualizing the locking and unlocking of shared resources.</p><pre><code>╔════════════════════════════╗
+<h5>22.2 <b>Mutex Locks</b></h5><p>Visualizing the locking and unlocking of shared resources.</p><pre><code>
+╔════════════════════════════╗
 ║ LOCK(mutex)                ║
 ╚════════════════════════════╝
         │
@@ -2192,7 +2065,8 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ LOCK(shared_mutex)         ║         ║ Critical Section           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
         │
@@ -2202,12 +2076,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>23. <b>Data Structures (Continued)</b></h4><br>
-<h5>23.1 <b>Enumerations (Enums)</b></h5><p>Enums visually represent the predefined choices.</p><pre><code>╔════════════════════════════╗
+<h5>23.1 <b>Enumerations (Enums)</b></h5><p>Enums visually represent the predefined choices.</p><pre><code>
+╔════════════════════════════╗
 ║ ENUM Color                 ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴──────────────┐
+   ▼                   ▼
 ╔════════════╗  ╔════════════╗
 ║ RED        ║  ║ BLUE       ║
 ╚════════════╝  ╚════════════╝
@@ -2218,12 +2093,14 @@ result := THREAD_JOIN(thread);
 ╚══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ ENUM Color: RED, GREEN,    ║         ║ Enum Value: GREEN          ║
-║ BLUE                      ║         ╚════════════════════════════╝
+║ BLUE                       ║         ╚════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
-<h5>23.2 <b>Tuples</b></h5><p>Visualizing tuples as a collection of multiple data types.</p><pre><code>╔════════════════════════════╗
+<h5>23.2 <b>Tuples</b></h5><p>Visualizing tuples as a collection of multiple data types.</p><pre><code>
+╔════════════════════════════╗
 ║ TUPLE (INT, STR, BOOL)     ║
 ╚════════════════════════════╝
         │
@@ -2233,11 +2110,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ TUPLE (42, "Alice", true)  ║         ║ Elements: INT, STR, BOOL   ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>23.3 <b>Records (Structs)</b></h5><p>Visual representation of record (struct) fields and values.</p><pre><code>╔════════════════════════════╗
+<h5>23.3 <b>Records (Structs)</b></h5><p>Visual representation of record (struct) fields and values.</p><pre><code>╔
+╔════════════════════════════╗
 ║ RECORD Person              ║
 ╚════════════════════════════╝
         │
@@ -2248,14 +2127,16 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ RECORD {name: "Alice",     ║         ║ Person {name: "Alice", age:30}║
-║ age: 30}                  ║         ╚════════════════════════════╝
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════════╗
+║ RECORD {name: "Alice",     ║         ║ Person {name: "Alice", age:30} ║
+║ age: 30}                   ║         ╚════════════════════════════════╝
 ╚════════════════════════════╝
 </code></pre><br>
 <hr><br>
 <h3>24. <b>Advanced Cryptographic Operations</b></h3><br>
-<h5>24.1 <b>Lattice-Based Cryptography</b></h5><p>Visual representation of Lattice-based operations such as sampling and decoding.</p><pre><code>╔════════════════════════════╗
+<h5>24.1 <b>Lattice-Based Cryptography</b></h5><p>Visual representation of Lattice-based operations such as sampling and decoding.</p><pre><code>
+╔════════════════════════════╗
 ║ LWE_SAMPLE(s, e)           ║
 ╚════════════════════════════╝
         │
@@ -2265,11 +2146,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ LWE_SAMPLE(secret, error)  ║         ║ VEC: [0x32, 0x45, 0x78]    ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>24.2 <b>Witness Encryption</b></h5><p>Visualizing witness encryption and decryption.</p><pre><code>╔════════════════════════════╗
+<h5>24.2 <b>Witness Encryption</b></h5><p>Visualizing witness encryption and decryption.</p><pre><code>
+╔════════════════════════════╗
 ║ WE_ENC(stmt, msg)          ║
 ╚════════════════════════════╝
         │
@@ -2288,15 +2171,18 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ WE_ENC("statement", msg)   ║         ║ CIPHER: 0xabc456           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ WE_DEC(cipher, witness)    ║         ║ RESULT: "Decrypted Data"   ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>25. <b>Blockchain-Specific Operations</b></h4><br>
-<h5>25.1 <b>Merkle Trees</b></h5><p>Visualizing Merkle Tree creation, insertion, and proof verification.</p><pre><code>╔════════════════════════════╗
+<h5>25.1 <b>Merkle Trees</b></h5><p>Visualizing Merkle Tree creation, insertion, and proof verification.</p><pre><code>
+╔════════════════════════════╗
 ║ MT_NEW()                   ║
 ╚════════════════════════════╝
         │
@@ -2304,7 +2190,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ Merkle Tree Created        ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ MT_INSERT(mt, leaf)        ║
 ╚════════════════════════════╝
         │
@@ -2314,22 +2201,24 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ MT_INSERT(mt, 0x123abc)    ║         ║ Leaf Added: 0x123abc       ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>25.2 <b>State Channels</b></h5><p>State channel operations, including opening, updating, and closing a channel.</p><pre><code>╔════════════════════════════╗
-║ SC_OPEN(participants, state)║
-╚════════════════════════════╝
+<h5>25.2 <b>State Channels</b></h5><p>State channel operations, including opening, updating, and closing a channel.</p><pre><code>
+╔══════════════════════════════╗
+║ SC_OPEN(participants, state) ║
+╚══════════════════════════════╝
         │
         ▼
 ╔════════════════════════════╗
 ║ State Channel Opened       ║
 ╚════════════════════════════╝
 
-╔════════════════════════════╗
-║ SC_UPDATE(sc, new_state, sigs)║
-╚════════════════════════════╝
+╔════════════════════════════════╗
+║ SC_UPDATE(sc, new_state, sigs) ║
+╚════════════════════════════════╝
         │
         ▼
 ╔════════════════════════════╗
@@ -2337,14 +2226,17 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SC_OPEN([pk1, pk2], state) ║         ║ Channel Opened             ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ SC_UPDATE(channel, new_state, sigs)  ║ State Updated Successfully ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</code></pre><pre><code>
+╔══════════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ SC_UPDATE(channel, new_state, sigs)  ║         ║ State Updated Successfully ║
+╚══════════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>25.3 <b>zk-SNARKs</b></h5><p>Visual representation of zk-SNARK setup, proof generation, and verification.</p><pre><code>╔════════════════════════════╗
+<h5>25.3 <b>zk-SNARKs</b></h5><p>Visual representation of zk-SNARK setup, proof generation, and verification.</p><pre><code>
+╔════════════════════════════╗
 ║ SNARK_SETUP(circuit)       ║
 ╚════════════════════════════╝
         │
@@ -2352,7 +2244,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ Proving Parameters: Setup  ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ SNARK_PROVE(pp, witness)   ║
 ╚════════════════════════════╝
         │
@@ -2360,7 +2253,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ PROOF: zk_snark_proof      ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ SNARK_VERIFY(pp, proof)    ║
 ╚════════════════════════════╝
         │
@@ -2370,18 +2264,22 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SNARK_SETUP(circuit)       ║         ║ Setup Completed            ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SNARK_PROVE(pp, witness)   ║         ║ PROOF: zk_abc123           ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SNARK_VERIFY(pp, proof)    ║         ║ VERIFICATION: SUCCESSFUL   ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>26. <b>Privacy-Preserving Protocols</b></h4><br>
-<h5>26.1 <b>Ring Signatures</b></h5><p>Visual representation of ring signature generation and verification.</p><pre><code>╔════════════════════════════╗
+<h5>26.1 <b>Ring Signatures</b></h5><p>Visual representation of ring signature generation and verification.</p><pre><code>
+╔════════════════════════════╗
 ║ RING_SIGN(sk, msg, ring)   ║
 ╚════════════════════════════╝
         │
@@ -2389,7 +2287,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ RING_SIG: signature_output ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ RING_VERIFY(msg, sig, ring)║
 ╚════════════════════════════╝
         │
@@ -2399,14 +2298,17 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ RING_SIGN(sk, msg, [pk1, pk2])║      ║ RING_SIG: ring_sig_123     ║
-╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ RING_VERIFY(msg, sig, [pk1, pk2])║   ║ VERIFICATION: SUCCESS      ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔═════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ RING_SIGN(sk, msg, [pk1, pk2])  ║         ║ RING_SIG: ring_sig_123     ║
+╚═════════════════════════════════╝         ╚════════════════════════════╝
+</code></pre><pre><code>
+╔══════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ RING_VERIFY(msg, sig, [pk1, pk2])║         ║ VERIFICATION: SUCCESS      ║
+╚══════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>26.2 <b>Blind Signatures</b></h5><p>Visual representation of blind signature creation and verification.</p><pre><code>╔════════════════════════════╗
+<h5>26.2 <b>Blind Signatures</b></h5><p>Visual representation of blind signature creation and verification.</p><pre><code>
+╔════════════════════════════╗
 ║ BLIND_SIGN(sk, blinded_msg)║
 ╚════════════════════════════╝
         │
@@ -2414,7 +2316,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ BLIND_SIG: blind_signature ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ BLIND_VERIFY(pk, msg, sig) ║
 ╚════════════════════════════╝
         │
@@ -2424,16 +2327,19 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ BLIND_SIGN(sk, blinded_msg)║         ║ BLIND_SIG: blind_sig_456   ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ BLIND_VERIFY(pk, msg, sig) ║         ║ VERIFICATION: SUCCESS      ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <hr><br>
 <h3>27. <b>Post-Quantum Cryptography</b></h3><br>
-<h5>27.1 <b>Key Generation for Post-Quantum Cryptography</b></h5><p>Visualizing the generation of post-quantum keys.</p><pre><code>╔════════════════════════════╗
+<h5>27.1 <b>Key Generation for Post-Quantum Cryptography</b></h5><p>Visualizing the generation of post-quantum keys.</p><pre><code>
+╔════════════════════════════╗
 ║ PQ_KEYGEN(security_param)  ║
 ╚════════════════════════════╝
         │
@@ -2444,12 +2350,14 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ PQ_KEYGEN(256)             ║         ║ PK: pq_public_key          ║
 ║                            ║         ║ SK: pq_secret_key          ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>27.2 <b>Post-Quantum Encryption and Decryption</b></h5><p>Visualizing post-quantum encryption and decryption processes.</p><pre><code>╔════════════════════════════╗
+<h5>27.2 <b>Post-Quantum Encryption and Decryption</b></h5><p>Visualizing post-quantum encryption and decryption processes.</p><pre><code>
+╔════════════════════════════╗
 ║ PQ_ENC(pk, msg)            ║
 ╚════════════════════════════╝
         │
@@ -2457,7 +2365,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ CIPHER: Encrypted PQ Data  ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ PQ_DEC(sk, cipher)         ║
 ╚════════════════════════════╝
         │
@@ -2467,15 +2376,18 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ PQ_ENC(pq_public_key, msg) ║         ║ CIPHER: pq_encrypted_data   ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ PQ_ENC(pq_public_key, msg) ║         ║ CIPHER: pq_encrypted_data  ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ PQ_DEC(pq_secret_key, cipher)║       ║ PLAINTEXT: decrypted_msg    ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</code></pre><pre><code>
+╔══════════════════════════════╗   ──▶   ╔══════════════════════════╗
+║ PQ_DEC(pq_secret_key, cipher)║         ║ PLAINTEXT: decrypted_msg ║
+╚══════════════════════════════╝         ╚══════════════════════════╝
 </code></pre><br>
 <h4>28. <b>Verifiable Delay Functions</b></h4><br>
-<h5>28.1 <b>Setup of Verifiable Delay Function</b></h5><p>Visualizing the setup phase for VDF.</p><pre><code>╔════════════════════════════╗
+<h5>28.1 <b>Setup of Verifiable Delay Function</b></h5><p>Visualizing the setup phase for VDF.</p><pre><code>
+╔════════════════════════════╗
 ║ VDF_SETUP(security_param)  ║
 ╚════════════════════════════╝
         │
@@ -2485,11 +2397,13 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ VDF_SETUP(256)             ║         ║ VDF_PP: vdf_params_256     ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>28.2 <b>Evaluation of Verifiable Delay Function</b></h5><p>Visualizing VDF evaluation.</p><pre><code>╔════════════════════════════╗
+<h5>28.2 <b>Evaluation of Verifiable Delay Function</b></h5><p>Visualizing VDF evaluation.</p><pre><code>
+╔════════════════════════════╗
 ║ VDF_EVAL(pp, input, time)  ║
 ╚════════════════════════════╝
         │
@@ -2500,13 +2414,15 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ VDF_EVAL(vdf_params, input, 5)║      ║ Output: 12345, Proof: vdf_p1║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔══════════════════════════════╗
+║ VDF_EVAL(vdf_params, input, 5)║         ║ Output: 12345, Proof: vdf_p1 ║
+╚═══════════════════════════════╝         ╚══════════════════════════════╝
 </code></pre><br>
-<h5>28.3 <b>Verification of Verifiable Delay Function</b></h5><p>Visualizing the verification of the result of a VDF.</p><pre><code>╔════════════════════════════╗
+<h5>28.3 <b>Verification of Verifiable Delay Function</b></h5><p>Visualizing the verification of the result of a VDF.</p><pre><code>
+╔═════════════════════════════════════╗
 ║ VDF_VERIFY(pp, input, output, proof)║
-╚════════════════════════════╝
+╚═════════════════════════════════════╝
         │
         ▼
 ╔════════════════════════════╗
@@ -2514,12 +2430,14 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ VDF_VERIFY(vdf_params, input, output, proof)║  ║ VERIFICATION: SUCCESS  ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔══════════════════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ VDF_VERIFY(vdf_params, input, output, proof) ║         ║   VERIFICATION: SUCCESS    ║
+╚══════════════════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>29. <b>Homomorphic Encryption</b></h4><br>
-<h5>29.1 <b>Key Generation for Homomorphic Encryption</b></h5><p>Visualizing key generation for homomorphic encryption.</p><pre><code>╔════════════════════════════╗
+<h5>29.1 <b>Key Generation for Homomorphic Encryption</b></h5><p>Visualizing key generation for homomorphic encryption.</p><pre><code>
+╔════════════════════════════╗
 ║ HE_KEYGEN(security_param)  ║
 ╚════════════════════════════╝
         │
@@ -2530,12 +2448,14 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ HE_KEYGEN(128)             ║         ║ HE_PK: he_public_key       ║
 ║                            ║         ║ HE_SK: he_secret_key       ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>29.2 <b>Homomorphic Encryption and Decryption</b></h5><p>Visualizing the encryption and decryption processes.</p><pre><code>╔════════════════════════════╗
+<h5>29.2 <b>Homomorphic Encryption and Decryption</b></h5><p>Visualizing the encryption and decryption processes.</p><pre><code>
+╔════════════════════════════╗
 ║ HE_ENC(pk, msg)            ║
 ╚════════════════════════════╝
         │
@@ -2543,7 +2463,8 @@ result := THREAD_JOIN(thread);
 ╔════════════════════════════╗
 ║ CIPHER: Homomorphic Cipher ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code
+╔════════════════════════════╗
 ║ HE_DEC(sk, cipher)         ║
 ╚════════════════════════════╝
         │
@@ -2553,24 +2474,25 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ HE_ENC(he_public_key, msg) ║         ║ CIPHER: he_ciphertext      ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ HE_DEC(he_secret_key, cipher)║       ║ PLAINTEXT: decrypted_result║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</code></pre><pre><code>
+╔══════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ HE_DEC(he_secret_key, cipher)║         ║ PLAINTEXT: decrypted_result║
+╚══════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>29.3 <b>Homomorphic Operations (Addition and Multiplication)</b></h5><p>Visualizing homomorphic addition and multiplication operations.</p><pre><code>╔════════════════════════════╗
-║ HE_ADD(pk, cipher1, cipher2)║
-╚════════════════════════════╝
+<h5>29.3 <b>Homomorphic Operations (Addition and Multiplication)</b></h5><p>Visualizing homomorphic addition and multiplication operations.</p><pre><code>
+    
+╔═══════════════════════════════╗
+║ HE_ADD(pk, cipher1, cipher2)  ║
+╚═══════════════════════════════╝
         │
         ▼
-╔════════════════════════════╗
-║ Result: Homomorphic Sum    ║
-╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+╔══════════════════════════════╗
 ║ HE_MULT(pk, cipher1, cipher2)║
-╚════════════════════════════╝
+╚══════════════════════════════╝
         │
         ▼
 ╔════════════════════════════╗
@@ -2578,15 +2500,19 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ HE_ADD(he_public_key, c1, c2)║       ║ Result: homomorphic_sum     ║
-╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ HE_MULT(he_public_key, c1, c2)║      ║ Result: homomorphic_product ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+</ul><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔══════════════════════════╗
+║ HE_ADD(he_public_key, c1, c2) ║         ║ Result: homomorphic_sum  ║
+╚═══════════════════════════════╝         ╚══════════════════════════╝
+</code></pre><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔═════════════════════════════╗
+║ HE_MULT(he_public_key, c1, c2)║         ║ Result: homomorphic_product ║
+╚═══════════════════════════════╝         ╚═════════════════════════════╝
 </code></pre><br>
 <h4>30. <b>Formal Verification and Safety</b></h4><br>
-<h5>30.1 <b>Invariant Checking</b></h5><p>Visual representation of invariant checks in code execution.</p><pre><code>╔════════════════════════════╗
+<h5>30.1 <b>Invariant Checking</b></h5><p>Visual representation of invariant checks in code execution.</p><pre><code>
+╔════════════════════════════╗
 ║ INVARIANT(condition, msg)  ║
 ╚════════════════════════════╝
         │
@@ -2596,54 +2522,60 @@ result := THREAD_JOIN(thread);
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ INVARIANT(x &gt; 0, "x must &gt; 0")║     ║ ASSERTION: TRUE             ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔═════════════════════════════════════╗   ──▶   ╔═════════════════╗
+║ INVARIANT(x &gt; 0, "x must &gt; 0")║         ║ ASSERTION: TRUE ║
+╚═════════════════════════════════════╝         ╚═════════════════╝
 </code></pre><br>
-<h5>30.2 <b>Formal Proof Generation</b></h5><p>Visualizing proof generation and verification.</p><pre><code>╔════════════════════════════╗
-║ PROVE(theorem)             ║
-╚════════════════════════════╝
+<h5>30.2 <b>Formal Proof Generation</b></h5><p>Visualizing proof generation and verification.</p><pre><code>
+╔════════════════╗
+║ PROVE(theorem) ║
+╚════════════════╝
         │
         ▼
+╔═════════════════════╗
+║ PROOF: Formal Proof ║
+╚═════════════════════╝
+</code></pre><pre><code>
 ╔════════════════════════════╗
-║ PROOF: Formal Proof        ║
-╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
 ║ CHECK_PROOF(theorem, proof)║
 ╚════════════════════════════╝
         │
         ▼
-╔════════════════════════════╗
-║ VERIFICATION: SUCCESS      ║
-╚════════════════════════════╝
+╔═══════════════════════╗
+║ VERIFICATION: SUCCESS ║
+╚═══════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ PROVE("x + y = y + x")     ║         ║ PROOF: formal_proof_123     ║
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ PROVE("x + y = y + x")     ║         ║ PROOF: formal_proof_123    ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 
-╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ CHECK_PROOF("x + y = y + x", proof) ║  ║ VERIFICATION: SUCCESS     ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+╔═════════════════════════════════════╗   ──▶   ╔═══════════════════════╗
+║ CHECK_PROOF("x + y = y + x", proof) ║         ║ VERIFICATION: SUCCESS ║
+╚═════════════════════════════════════╝         ╚═══════════════════════╝
 </code></pre><br>
 <h4>31. <b>Error Handling and Debugging (Continued)</b></h4><br>
-<h5>31.1 <b>Detailed Error Message Structure</b></h5><p>Visualizing detailed error messages and stack traces for easier debugging.</p><pre><code>╔════════════════════════════╗
-║ ERROR: &lt;error_message&gt;     ║
-╚════════════════════════════╝
+<h5>31.1 <b>Detailed Error Message Structure</b></h5><p>Visualizing detailed error messages and stack traces for easier debugging.</p><pre><code>
+╔══════════════════════════════╗
+║ ERROR: &lt;error_message&gt; ║
+╚══════════════════════════════╝
         │
         ▼
-╔════════════════════════════╗
-║ Location: &lt;file&gt;:&lt;line&gt;    ║
-║ Callstack: [Function1,     ║
-║             Function2,     ║
-║             Function3]     ║
-╚════════════════════════════╝
+╔═════════════════════════════════════╗
+║ Location: &lt;file&gt;:&lt;line&gt; ║
+║ Callstack: [Function1,              ║
+║             Function2,              ║
+║             Function3]              ║
+╚═════════════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ ERROR: Divide by zero      ║         ║ Location: main.rs:20        ║
-╚════════════════════════════╝         ║ Callstack: [divide, main]   ║
-                                        ╚════════════════════════════╝
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ ERROR: Divide by zero      ║         ║ Location: main.rs:20       ║
+╚════════════════════════════╝         ║ Callstack: [divide, main]  ║
+                                       ╚════════════════════════════╝
 </code></pre><pre><code>##### 31.2 **Debugging Information**
 Visual representation of debug print statements and stack traces.
 ╔════════════════════════════╗
@@ -2667,7 +2599,8 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ DEBUG_PRINT(x + y)         ║         ║ Output: 10                 ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 
@@ -2677,7 +2610,8 @@ Visual representation of debug print statements and stack traces.
 </code></pre><br>
 <br>
 <h3>32. <b>Interoperability</b></h3><br>
-<h5>32.1 <b>Foreign Function Interface (FFI) Import</b></h5><p>Visualizing the process of importing functions from other languages using FFI.</p><pre><code>╔════════════════════════════╗
+<h5>32.1 <b>Foreign Function Interface (FFI) Import</b></h5><p>Visualizing the process of importing functions from other languages using FFI.</p><pre><code>
+╔════════════════════════════╗
 ║ FFI_IMPORT(language, func) ║
 ╚════════════════════════════╝
         │
@@ -2687,11 +2621,13 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ FFI_IMPORT("C", "math_func")║        ║ Imported Function: math_func║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔══════════════════════════════╗   ──▶   ╔══════════════════════════════╗
+║ FFI_IMPORT("C", "math_func") ║         ║ Imported Function: math_func ║
+╚══════════════════════════════╝         ╚══════════════════════════════╝
 </code></pre><br>
-<h5>32.2 <b>Foreign Function Interface (FFI) Export</b></h5><p>Visualizing the process of exporting functions to other languages using FFI.</p><pre><code>╔════════════════════════════╗
+<h5>32.2 <b>Foreign Function Interface (FFI) Export</b></h5><p>Visualizing the process of exporting functions to other languages using FFI.</p><pre><code>
+╔════════════════════════════╗
 ║ FFI_EXPORT(func, language) ║
 ╚════════════════════════════╝
         │
@@ -2701,12 +2637,14 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ FFI_EXPORT(my_func, "Python")║       ║ Exported to Python: my_func ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔══════════════════════════════╗   ──▶   ╔═════════════════════════════╗
+║ FFI_EXPORT(my_func, "Python")║         ║ Exported to Python: my_func ║
+╚══════════════════════════════╝         ╚═════════════════════════════╝
 </code></pre><br>
 <h4>33. <b>Serialization</b></h4><br>
-<h5>33.1 <b>Serialization of Data Structures</b></h5><p>Visualizing the serialization process where data structures are converted into byte arrays.</p><pre><code>╔════════════════════════════╗
+<h5>33.1 <b>Serialization of Data Structures</b></h5><p>Visualizing the serialization process where data structures are converted into byte arrays.</p><pre><code> 
+╔════════════════════════════╗
 ║ SERIALIZE(object)          ║
 ╚════════════════════════════╝
         │
@@ -2716,11 +2654,13 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ SERIALIZE(my_obj)          ║         ║ Byte Stream: [0x12, 0x34]  ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>33.2 <b>Deserialization of Data Structures</b></h5><p>Visualizing the deserialization process where byte streams are converted back into data structures.</p><pre><code>╔════════════════════════════╗
+<h5>33.2 <b>Deserialization of Data Structures</b></h5><p>Visualizing the deserialization process where byte streams are converted back into data structures.</p><pre><code>
+╔════════════════════════════╗
 ║ DESERIALIZE(data, type)    ║
 ╚════════════════════════════╝
         │
@@ -2730,12 +2670,14 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ DESERIALIZE([0x12, 0x34], T)║       ║ Deserialized: my_object     ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔══════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ DESERIALIZE([0x12, 0x34], T) ║         ║ Deserialized: my_object    ║
+╚══════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <h4>34. <b>Safety and Formal Verification (Continued)</b></h4><br>
-<h5>34.1 <b>Preconditions</b></h5><p>Visualizing precondition checks before function execution.</p><pre><code>╔════════════════════════════╗
+<h5>34.1 <b>Preconditions</b></h5><p>Visualizing precondition checks before function execution.</p><pre><code>
+╔════════════════════════════╗
 ║ PRE(condition, msg)        ║
 ╚════════════════════════════╝
         │
@@ -2745,11 +2687,13 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ PRE(x &gt; 0, "x must be &gt; 0")║        ║ Check Passed: TRUE          ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔═══════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ PRE(x &gt; 0, "x must be &gt; 0") ║         ║ Check Passed: TRUE         ║
+╚═══════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>34.2 <b>Postconditions</b></h5><p>Visualizing postcondition checks after function execution.</p><pre><code>╔════════════════════════════╗
+<h5>34.2 <b>Postconditions</b></h5><p>Visualizing postcondition checks after function execution.</p><pre><code>
+╔════════════════════════════╗
 ║ POST(condition, msg)       ║
 ╚════════════════════════════╝
         │
@@ -2759,11 +2703,13 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ POST(result != NULL, "result valid") ║  ║ Check Passed: TRUE        ║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔══════════════════════════════════════╗   ──▶   ╔════════════════════════════╗
+║ POST(result != NULL, "result valid") ║         ║ Check Passed: TRUE         ║
+╚══════════════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
-<h5>34.3 <b>Invariant Checking</b></h5><p>Visualizing invariant checks to maintain consistency throughout the program execution.</p><pre><code>╔════════════════════════════╗
+<h5>34.3 <b>Invariant Checking</b></h5><p>Visualizing invariant checks to maintain consistency throughout the program execution.</p><pre><code>
+╔════════════════════════════╗
 ║ INVARIANT(condition, msg)  ║
 ╚════════════════════════════╝
         │
@@ -2773,18 +2719,20 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔═══════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ INVARIANT(balance &gt;= 0,    ║         ║ Invariant Held: TRUE       ║
-║ "Balance cannot be negative") ║       ╚════════════════════════════╝
-╚════════════════════════════╝
+║ "Balance cannot be negative") ║         ╚════════════════════════════╝
+╚═══════════════════════════════╝
 </code></pre><br>
 <h4>35. <b>Parallel Execution and Lazy Evaluation</b></h4><br>
-<h5>35.1 <b>Parallel Task Execution</b></h5><p>Visualizing the execution of multiple tasks in parallel.</p><pre><code>╔════════════════════════════╗
+<h5>35.1 <b>Parallel Task Execution</b></h5><p>Visualizing the execution of multiple tasks in parallel.</p><pre><code>
+╔════════════════════════════╗
 ║ PAR_EXEC(tasks)            ║
 ╚════════════════════════════╝
         │
-   ┌────┴─────┐
-   ▼          ▼
+   ┌────┴───────────────┐
+   ▼                    ▼
 ╔════════════╗  ╔════════════╗
 ║ Task 1     ║  ║ Task 2     ║
 ╚════════════╝  ╚════════════╝
@@ -2795,11 +2743,13 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔═════════════════════════════╗
 ║ PAR_EXEC([task1, task2])   ║         ║ Aggregated Results: [r1, r2]║
-╚════════════════════════════╝         ╚════════════════════════════╝
+╚════════════════════════════╝         ╚═════════════════════════════╝
 </code></pre><br>
-<h5>35.2 <b>Lazy Evaluation</b></h5><p>Visualizing how expressions are lazily evaluated only when needed.</p><pre><code>╔════════════════════════════╗
+<h5>35.2 <b>Lazy Evaluation</b></h5><p>Visualizing how expressions are lazily evaluated only when needed.</p><pre><code>
+╔════════════════════════════╗
 ║ LAZY(expr)                 ║
 ╚════════════════════════════╝
         │
@@ -2807,7 +2757,8 @@ Visual representation of debug print statements and stack traces.
 ╔════════════════════════════╗
 ║ Lazy Expression Created    ║
 ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗
 ║ FORCE(expr)                ║
 ╚════════════════════════════╝
         │
@@ -2817,10 +2768,12 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ LAZY(x + y)                ║         ║ Lazy Expression Created    ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
-</code></pre><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
+</code></pre><pre><code>
+╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
 ║ FORCE(x + y)               ║         ║ Evaluated: Result: 10      ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
@@ -2840,14 +2793,15 @@ Visual representation of debug print statements and stack traces.
 ╚════════════════════════════╝
 </code></pre><ul>
 <li><b>Example</b>:</li>
-</ul><pre><code>╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ MEMO(expensive_computation)║        ║ Cache Created for Future Use║
-╚════════════════════════════╝         ╚════════════════════════════╝
+</ul><pre><code>
+╔════════════════════════════╗   ──▶   ╔═════════════════════════════╗
+║ MEMO(expensive_computation)║         ║ Cache Created for Future Use║
+╚════════════════════════════╝         ╚═════════════════════════════╝
 
 ╔════════════════════════════╗   ──▶   ╔════════════════════════════╗
-║ Call(expensive_computation)║         ║ Cached Result: 100          ║
+║ Call(expensive_computation)║         ║ Cached Result: 100         ║
 ╚════════════════════════════╝         ╚════════════════════════════╝
 </code></pre><br>
 <hr><br>
 <br>
-<p>With these sections done, we are nearing the end of the core visual outputs that match the programming logic we've mapped out so far. Let me know if you'd like to continue or focus on specific remaining areas. We're ensuring every input is thoroughly matched with a visual counterpart!</p>
+<h3>
