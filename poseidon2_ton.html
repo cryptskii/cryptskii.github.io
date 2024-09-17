@@ -45,10 +45,23 @@
 ;; integers, modular operations, and the Poseidon sponge 
 ;; construction.
 ;; ===========================================================
-#include "./import_libs/stdlib.fc";
+#include "./imports/stdlib.fc";
 ;; ===========================================================
 ;; 1. Constants and Parameters
 ;; ===========================================================
+
+;; Poseidon2 constants
+const int P0 = 0x43E1F593F0000001;
+const int T = 3;
+const int D = 5;
+const int RF = 8;
+const int RP = 57;
+const int TOTAL_ROUNDS = RF + RP;
+const int MAX_ALLOWED_INPUTS = 100;
+
+;; Round constants for Poseidon2 permutation
+;; Ensure all RC_*_* constants from RC_0_0 to RC_64_2 are defined here
+;; Example:
 
 ;; Poseidon2 constants
 const int P0 = 0x43E1F593F0000001;
@@ -267,17 +280,36 @@ const int M20 = 1;
 const int M21 = 1;
 const int M22 = 2;
 
+;; ===========================================================
+;; 2. Helper Functions
+;; ===========================================================
+
 ;; Function to add two numbers modulo P0
+;; Parameters:
+;;   a - First operand
+;;   b - Second operand
+;; Returns:
+;;   (a + b) mod P0
 int add_mod(int a, int b) inline {
     return (a + b) % P0;
 }
 
 ;; Function to multiply two numbers modulo P0
+;; Parameters:
+;;   a - First operand
+;;   b - Second operand
+;; Returns:
+;;   (a * b) mod P0
 int mul_mod(int a, int b) inline {
     return (a * b) % P0;
 }
 
 ;; Function to raise a number to a power modulo P0
+;; Parameters:
+;;   base - The base number
+;;   exp - The exponent
+;; Returns:
+;;   (base ^ exp) mod P0
 int pow_mod(int base, int exp) inline {
     int result = 1;
     while (exp > 0) {
@@ -291,11 +323,19 @@ int pow_mod(int base, int exp) inline {
 }
 
 ;; Function to apply the s-box transformation
+;; Parameters:
+;;   x - Input number
+;; Returns:
+;;   x raised to the power D modulo P0
 int sbox(int x) inline {
     return pow_mod(x, D);
 }
 
 ;; Function to get round constants for a given round
+;; Parameters:
+;;   round - The current round number
+;; Returns:
+;;   A tuple containing the three round constants for the round
 (int, int, int) get_round_constants(int round) inline {
     if (round == 0) { return (RC_0_0, RC_0_1, RC_0_2); }
     if (round == 1) { return (RC_1_0, RC_1_1, RC_1_2); }
@@ -365,7 +405,6 @@ int sbox(int x) inline {
     return (0, 0, 0); ;; Default case, should never happen
 }
 
-
 ;; This function performs an optimized matrix multiplication.
 (int, int, int) matrix_mul_optimized(int x0, int x1, int x2) inline {
     int y0 = add_mod(mul_mod(M00, x0), add_mod(mul_mod(M01, x1), mul_mod(M02, x2)));
@@ -374,7 +413,15 @@ int sbox(int x) inline {
     return (y0, y1, y2);
 }
 
+;; ===========================================================
+;; 3. Poseidon2 Permutation
+;; ===========================================================
+
 ;; This function applies the Poseidon2 permutation to the input state.
+;; Parameters:
+;;   s0, s1, s2 - Current state elements
+;; Returns:
+;;   Updated state as a tuple
 (int, int, int) poseidon2_permutation(int s0, int s1, int s2) {
     int a = 0;
     int q0 = 0;
@@ -394,11 +441,17 @@ int sbox(int x) inline {
         q1 = q0;
         q0 = s;
 
-        (s0, s1, s2) = (s1, s2, s0);
+        ;; Rotate the state
+        ;; Since FunC does not support tuple rotation directly, reassign individually
+        int temp = s0;
+        s0 = s1;
+        s1 = s2;
+        s2 = temp;
 
         s0 = add_mod(s0, a);
 
-        if ((i < RF / 2) | (i >= RF / 2 + RP)) { ;; Changed | to ||
+        ;; Use bitwise OR for logical conditions
+        if ((i < RF / 2) | (i >= RF / 2 + RP)) {
             s1 = sbox(s1);
             s2 = sbox(s2);
             (s0, s1, s2) = matrix_mul_optimized(s0, s1, s2);
@@ -413,8 +466,16 @@ int sbox(int x) inline {
     return (s0, s1, s2);
 }
 
+;; ===========================================================
+;; 4. Poseidon2 Hash Function
+;; ===========================================================
 
-;; Poseidon2 hash function to return a tuple representing a 256-bit hash
+;; Poseidon2 hash function returning a tuple representing a 256-bit hash
+;; Parameters:
+;;   inputs - Tuple of input elements
+;;   input_len - Number of input elements
+;; Returns:
+;;   A tuple representing the 256-bit hash
 (int, int, int, int) poseidon2_hash(tuple inputs, int input_len) {
     int s0 = 0;
     int s1 = 0;
@@ -434,6 +495,20 @@ int sbox(int x) inline {
     ;; Initialize the fourth limb (s3) as zero or based on your Poseidon2 design
     int s3 = 0;
     return (s0, s1, s2, s3);
+}
+
+;; ===========================================================
+;; 5. Message Handling
+;; ===========================================================
+
+;; Simple throw_if implementation
+;; Parameters:
+;;   error_code - The error code to throw if the condition is true
+;;   condition - The condition to evaluate
+void throw_if(int error_code, bool condition) {
+    if (condition) {
+        throw(error_code);
+    }
 }
 
 ;; Returns a tuple of 32-bit integers
@@ -459,33 +534,34 @@ int sbox(int x) inline {
         }
         
         ;; Expected Hash (load expected hash from the message)
-        (int expected_hash_part1, int expected_hash_part2, int expected_hash_part3, int expected_hash_part4) = (
-            in_msg_body~load_uint(64),
-            in_msg_body~load_uint(64),
-            in_msg_body~load_uint(64),
-            in_msg_body~load_uint(64)
-        );
+        int expected_hash_part1 = in_msg_body~load_uint(64);
+        int expected_hash_part2 = in_msg_body~load_uint(64);
+        int expected_hash_part3 = in_msg_body~load_uint(64);
+        int expected_hash_part4 = in_msg_body~load_uint(64);
 
-        ;; Verification Result
+        ;; Compute the Poseidon2 hash
         (int calculated_hash_part1, int calculated_hash_part2, int calculated_hash_part3, int calculated_hash_part4) = poseidon2_hash(inputs, num_inputs);
 
         ;; Verification Result: Compare each limb
-        var is_valid = (
-            (calculated_hash_part1 == expected_hash_part1) &
-            (calculated_hash_part2 == expected_hash_part2) &
-            (calculated_hash_part3 == expected_hash_part3) &
-            (calculated_hash_part4 == expected_hash_part4)
-        );
+        ;; FunC does not support logical AND (&&), so use bitwise AND (&)
+        bool is_valid = ((calculated_hash_part1 == expected_hash_part1) &
+                         (calculated_hash_part2 == expected_hash_part2) &
+                         (calculated_hash_part3 == expected_hash_part3) &
+                         (calculated_hash_part4 == expected_hash_part4)) ? 1 : 0;
 
-        ;; Construct Response Message with each limb
+        ;; Construct Response Message with each limb and verification result
         cell msg = begin_cell()
             .store_uint(0x10, 6) ;; nobounce flag
             .store_uint(op, 32)  ;; original operation code
-            .store_uint(calculated_hash_part1, 64)  ;; limb 1
-            .store_uint(calculated_hash_part2, 64)  ;; limb 2
-            .store_uint(calculated_hash_part3, 64)  ;; limb 3
-            .store_uint(calculated_hash_part4, 64)  ;; limb 4
-            .store_uint(is_valid ? 1 : 0, 1)     ;; verification result
+            .store_uint(calculated_hash_part1, 64)  ;; computed hash limb 1
+            .store_uint(calculated_hash_part2, 64)  ;; computed hash limb 2
+            .store_uint(calculated_hash_part3, 64)  ;; computed hash limb 3
+            .store_uint(calculated_hash_part4, 64)  ;; computed hash limb 4
+            .store_uint(expected_hash_part1, 64)    ;; expected hash limb 1
+            .store_uint(expected_hash_part2, 64)    ;; expected hash limb 2
+            .store_uint(expected_hash_part3, 64)    ;; expected hash limb 3
+            .store_uint(expected_hash_part4, 64)    ;; expected hash limb 4
+            .store_uint(is_valid, 1)                ;; verification result
             .end_cell();
         
         ;; Send Response Message
@@ -496,6 +572,10 @@ int sbox(int x) inline {
     ;; Unsupported Operation
     throw(0xffff);
 }
+
+;; ===========================================================
+;; 6. Testing
+;; ===========================================================
 
 ;; Test function
 () run_tests() {
@@ -509,7 +589,11 @@ int sbox(int x) inline {
     int expected_hash1_part2 = 0x123456789ABCDEF0; ;; Replace with actual expected value
     int expected_hash1_part3 = 0x123456789ABCDEF0; ;; Replace with actual expected value
     int expected_hash1_part4 = 0x123456789ABCDEF0; ;; Replace with actual expected value
-    throw_if(100, (hash_result1_part1 != expected_hash1_part1) | (hash_result1_part2 != expected_hash1_part2) | (hash_result1_part3 != expected_hash1_part3) | (hash_result1_part4 != expected_hash1_part4));
+    throw_if(100, (hash_result1_part1 != expected_hash1_part1) | 
+                   (hash_result1_part2 != expected_hash1_part2) | 
+                   (hash_result1_part3 != expected_hash1_part3) | 
+                   (hash_result1_part4 != expected_hash1_part4));
+
     ;; Test Case 2: Empty input
     tuple test_inputs2 = empty_tuple();
     (int hash_result2_part1, int hash_result2_part2, int hash_result2_part3, int hash_result2_part4) = poseidon2_hash(test_inputs2, 0);
@@ -517,7 +601,11 @@ int sbox(int x) inline {
     int expected_hash2_part2 = 0xFEDCBA9876543210; ;; Replace with actual expected value
     int expected_hash2_part3 = 0xFEDCBA9876543210; ;; Replace with actual expected value
     int expected_hash2_part4 = 0xFEDCBA9876543210; ;; Replace with actual expected value
-    throw_if(101, (hash_result2_part1 != expected_hash2_part1) | (hash_result2_part2 != expected_hash2_part2) | (hash_result2_part3 != expected_hash2_part3) | (hash_result2_part4 != expected_hash2_part4));
+    throw_if(101, (hash_result2_part1 != expected_hash2_part1) | 
+                   (hash_result2_part2 != expected_hash2_part2) | 
+                   (hash_result2_part3 != expected_hash2_part3) | 
+                   (hash_result2_part4 != expected_hash2_part4));
+
     ;; Test Case 3: Single element
     tuple test_inputs3 = empty_tuple();
     test_inputs3~tpush(42);
@@ -526,11 +614,22 @@ int sbox(int x) inline {
     int expected_hash3_part2 = 0xAABBCCDDEEFF0011; ;; Replace with actual expected value
     int expected_hash3_part3 = 0xAABBCCDDEEFF0011; ;; Replace with actual expected value
     int expected_hash3_part4 = 0xAABBCCDDEEFF0011; ;; Replace with actual expected value
-    throw_if(102, (hash_result3_part1 != expected_hash3_part1) | (hash_result3_part2 != expected_hash3_part2) | (hash_result3_part3 != expected_hash3_part3) | (hash_result3_part4 != expected_hash3_part4));
+    throw_if(102, (hash_result3_part1 != expected_hash3_part1) | 
+                   (hash_result3_part2 != expected_hash3_part2) | 
+                   (hash_result3_part3 != expected_hash3_part3) | 
+                   (hash_result3_part4 != expected_hash3_part4));
 
     ;; Add more test cases as needed
+
+    ;; Log Success
+    ;; Note: Ensure that the ~dump function is supported in your environment.
+    ;; If not, consider alternative logging mechanisms.
     ~dump("All tests passed successfully.");
 }
+
+;; ===========================================================
+;; 7. Entrypoint
+;; ===========================================================
 
 ;; Entry point
 () entrypoint() {
