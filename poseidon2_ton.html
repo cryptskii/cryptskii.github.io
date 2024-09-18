@@ -34,8 +34,8 @@
 </body>
 </html>
 #pragma version >=0.2.0;
-#include "./imports/stdlib.fc";
-#include "./imports/mathlib.fc";
+#include "./import_libs/stdlib.fc";
+#include "./import_libs/mathlib.fc";
 ;; ===========================================================
 ;; Poseidon2 Hash Function Implementation in FunC for TON
 ;; ===========================================================
@@ -449,6 +449,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 }
 
 
+;; Adds two multi-limb numbers modulo the Goldilocks prime
 (int, int, int, int) my_add_mod_limbs(int a0, int a1, int a2, int a3, int b0, int b1, int b2, int b3) inline {
     int c0 = a0 + b0;
     int carry0 = c0 >> LIMB_SIZE;
@@ -488,6 +489,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 }
 
 
+;; Applies the S-box transformation to the given limbs
 (int, int, int, int) my_sbox_limbs(int x0, int x1, int x2, int x3) inline {
     ;; x^2
     (int x2_0, int x2_1, int x2_2, int x2_3) = my_mul_mod_limbs(x0, x1, x2, x3, x0, x1, x2, x3);
@@ -508,6 +510,8 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 ;; ===========================================================
 ;; 4. Poseidon2 Permutation
 ;; ===========================================================
+
+;; Computes the Poseidon2 permutation on the given state
 (int, int, int, int, 
  int, int, int, int, 
  int, int, int, int, 
@@ -599,6 +603,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
         i += 1;
     }
 
+    ;; Return the updated state
     return (
         local_s00, local_s01, local_s02, local_s03,
         local_s10, local_s11, local_s12, local_s13,
@@ -611,6 +616,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 ;; 5. Poseidon2 Hash Function
 ;; ===========================================================
 
+;; Computes the Poseidon2 hash of the given inputs
 (int, int) my_poseidon2_hash(
     int in00, int in01, int in02, int in03,  ;; Input 0
     int in10, int in11, int in12, int in13   ;; Input 1
@@ -642,6 +648,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 ;; 6. Contract Entry Point
 ;; ===========================================================
 
+;; Receives and processes incoming messages
 () my_recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
     ;; Parse the incoming message
     var cs = in_msg_cell.begin_parse();
@@ -701,6 +708,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 ;; 7. Main Function
 ;; ===========================================================
 
+;; Entry point for the contract
 () main() {
     var in_msg_cell = get_data();  ;; Retrieve the incoming message cell
     var in_msg = in_msg_cell.begin_parse();  ;; Start parsing the incoming message
