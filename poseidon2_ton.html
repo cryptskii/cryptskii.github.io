@@ -63,10 +63,10 @@ const int RF_FULL = 8;  ;; Full rounds
 const int RP_PARTIAL = 56;  ;; Partial rounds
 const int TOTAL_ROUNDS = RF_FULL + RP_PARTIAL;
 
-const int LIMB_SIZE = 64;  ;; or whatever size is appropriate (e.g., 32 or 64)
+const int LIMB_SIZE = 64;  ;; Size of each limb in bits
 
 ;; Security level
-const int SECURITY_LEVEL = 128;  ;; in bits (configurable security level)
+const int SECURITY_LEVEL = 128;  ;; in bits
 
 ;; Maximum allowed inputs
 const int MAX_ALLOWED_INPUTS = 2;  ;; For 256-bit input (sets input constraints)
@@ -80,12 +80,6 @@ const int ROUND_CONSTANTS_SIZE = TOTAL_ROUNDS * T * 8;
 
 ;; Precomputed MDS matrix size (bytes)
 const int MDS_MATRIX_SIZE = T * T * 8;
-
-;; Goldilocks prime field modulus
-const int P0_0 = 0xFFFFFFFF00000001;  ;; Least significant limb (this is the entire prime)
-const int P0_1 = 0;  ;; No second limb, so set to 0
-const int P0_2 = 0;  ;; No third limb, so set to 0
-const int P0_3 = 0;  ;; No fourth limb, so set to 0
 
 ;; MDS Constants
 const int M00 = 0xD94E1BE64A31CBBE;
@@ -429,79 +423,95 @@ const int RC63_3 = 0x46315362D6B7367E;
 ;; Define the number of limbs used for multi-limb arithmetic
 const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 
-;; ===========================================================
-;; 3. Helper Functions for Multi-Limb Arithmetic
-;; ===========================================================
+;;=======================================================================
+;; 4. Helper Functions for Multi-Limb Arithmetic
+;;=======================================================================
 
-;; Subtract two multi-limb numbers with modular reduction
-(int, int, int, int) my_sub_mod_limbs(int a0, int a1, int a2, int a3, int b0, int b1, int b2, int b3) inline {
-    ;; Perform subtraction on the first limb
+;; Subtract two multi-limb numbers with modular reduction;; Subtract two multi-limb numbers with modular reduction (256-bit, 4 limbs)
+(int, int, int, int) my_sub_mod_limbs(
+    int a0, int a1, int a2, int a3,
+    int b0, int b1, int b2, int b3
+) inline {
+    ;; Subtract each limb with borrow handling
     int diff0 = a0 - b0;
     int borrow0 = (diff0 < 0) ? 1 : 0;
+    diff0 += borrow0 * 0xFFFFFFFF00000001;  ;; Borrow from the modulus if necessary
 
-    ;; If the result is negative, add the modulus (Goldilocks prime)
-    if (borrow0 != 0) {
-        diff0 += P0_0;
-    }
+    int diff1 = a1 - b1 - borrow0;
+    int borrow1 = (diff1 < 0) ? 1 : 0;
+    diff1 += borrow1 * 0xFFFFFFFFFFFFFFFF;
 
-    ;; Since higher limbs are zero, return zero for them
-    return (diff0 & ((1 << LIMB_SIZE) - 1), 0, 0, 0);
+    int diff2 = a2 - b2 - borrow1;
+    int borrow2 = (diff2 < 0) ? 1 : 0;
+    diff2 += borrow2 * 0xFFFFFFFFFFFFFFFF;
+
+    int diff3 = a3 - b3 - borrow2;
+    int borrow3 = (diff3 < 0) ? 1 : 0;
+    diff3 += borrow3 * 0xFFFFFFFFFFFFFFFF;
+
+    ;; Return the full 256-bit difference
+    return (diff0, diff1, diff2, diff3);
 }
 
-(int, int, int, int) my_add_mod_limbs(int a0, int a1, int a2, int a3, int b0, int b1, int b2, int b3) inline {
-    int c0 = a0 + b0;
-    int carry0 = c0 >> LIMB_SIZE;
-    c0 &= ((1 << LIMB_SIZE) - 1);
+;; Add two multi-limb numbers with modular reduction
+(int, int, int, int) my_add_mod_limbs(
+    int a0, int a1, int a2, int a3,
+    int b0, int b1, int b2, int b3
+) inline {
+    ;; Add each limb with carry handling
+    int sum0 = a0 + b0;
+    int carry0 = (sum0 < a0) ? 1 : 0;  ;; Check for overflow
 
-    ;; We only care about the first limb since the prime fits within 64 bits.
-    int need_reduce = (c0 >= P0_0);
-    
-    if (need_reduce != 0) {
-        ;; Reduce by Goldilocks prime
-        c0 -= P0_0;
+    int sum1 = a1 + b1 + carry0;
+    int carry1 = (sum1 < a1) ? 1 : 0;
+
+    int sum2 = a2 + b2 + carry1;
+    int carry2 = (sum2 < a2) ? 1 : 0;
+
+    int sum3 = a3 + b3 + carry2;
+    int carry3 = (sum3 < a3) ? 1 : 0;
+    ;; Check if the result is greater than the modulus
+    if ((sum3 > 0) | (sum2 > 0) | (sum1 > 0) | (sum0 >= 0xFFFFFFFF00000001)) {
+        ;; Perform modular reduction by subtracting the prime modulus
+        return my_sub_mod_limbs(sum0, sum1, sum2, sum3, 0xFFFFFFFF00000001, 0, 0, 0);
     }
 
-    return (c0, 0, 0, 0);  ;; Higher limbs are zero
+    return (sum0, sum1, sum2, sum3);  ;; Return the full 256-bit sum
 }
 
+;; Multiply two multi-limb numbers with modular reduction (256-bit, 4 limbs)
+(int, int, int, int) my_mul_mod_limbs(
+    int a0, int a1, int a2, int a3,
+    int b0, int b1, int b2, int b3
+) inline {
+    ;; Multiply the first limbs and compute the result
+    int prod0 = a0 * b0;
+    int carry0 = prod0 >> 64;
+    prod0 &= ((1 << 64) - 1);  ;; Get lower 64 bits
 
-;; Multiply two multi-limb numbers with modular reduction
-(int, int, int, int) my_mul_mod_limbs(int a0, int a1, int a2, int a3, int b0, int b1, int b2, int b3) inline {
-    ;; Perform full multiplication on the first limb
-    int c0 = a0 * b0;
+    int prod1 = a0 * b1 + a1 * b0 + carry0;
+    int carry1 = prod1 >> 64;
+    prod1 &= ((1 << 64) - 1);
 
-    ;; Since the prime fits in one limb, we only need to reduce on the first limb
-    int r0 = c0 & ((1 << LIMB_SIZE) - 1);
-    int carry = c0 >> LIMB_SIZE;
+    int prod2 = a0 * b2 + a1 * b1 + a2 * b0 + carry1;
+    int carry2 = prod2 >> 64;
+    prod2 &= ((1 << 64) - 1);
 
-    ;; If there's overflow, add it to the result
-    r0 += carry;
+    int prod3 = a0 * b3 + a1 * b2 + a2 * b1 + a3 * b0 + carry2;
+    int carry3 = prod3 >> 64;
+    prod3 &= ((1 << 64) - 1);
 
-    ;; If r0 exceeds the prime, reduce it by subtracting the prime
-    if (r0 >= P0_0) {
-        r0 -= P0_0;
+    ;; Perform modular reduction if necessary
+    if ((carry3 > 0) | (prod3 >= 0xFFFFFFFF00000001)) {  ;; Corrected condition
+        return my_sub_mod_limbs(prod0, prod1, prod2, prod3, 0xFFFFFFFF00000001, 0, 0, 0);
     }
 
-    ;; Since the Goldilocks prime is small, no need for higher limbs
-    return (r0, 0, 0, 0);
-}
-
-
-(int, int, int, int) my_sbox_limbs(int x0, int x1, int x2, int x3) inline {
-    ;; x^2
-    (int x2_0, int x2_1, int x2_2, int x2_3) = my_mul_mod_limbs(x0, x1, x2, x3, x0, x1, x2, x3);
-
-    ;; x^4
-    (int x4_0, int x4_1, int x4_2, int x4_3) = my_mul_mod_limbs(x2_0, x2_1, x2_2, x2_3, x2_0, x2_1, x2_2, x2_3);
-
-    ;; x^5
-    (int x5_0, int x5_1, int x5_2, int x5_3) = my_mul_mod_limbs(x4_0, x4_1, x4_2, x4_3, x0, x1, x2, x3);
-
-    return (x5_0, x5_1, x5_2, x5_3);
+    ;; Return the full 256-bit result
+    return (prod0, prod1, prod2, prod3);
 }
 
 ;;=======================================================================
-;; 4. Helper Function for Round Constants
+;; 5. Helper Function for Round Constants
 ;;=======================================================================
 
 ;; Retrieve the round constant by index using conditional statements
@@ -571,75 +581,87 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     if (index == 62) { return (RC62_0, RC62_1, RC62_2, RC62_3); }
     if (index == 63) { return (RC63_0, RC63_1, RC63_2, RC63_3); }
     ;;  Throw error if index is out of range
-    throw(0xffff);  ;; Throw exception for unknown operations
+    return (0, 0, 0, 0);  ;; Return default values instead of throwing an error
 }
-
 ;; ===========================================================
-;; 3. Helper Function for MDS Matrix Multiplication
+;; 6. Helper Function for MDS Matrix Multiplication
 ;; ===========================================================
-
-;; Applies the MDS matrix to the current state
-(int, int, int, int) my_apply_mds(
+(int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int) my_apply_mds(
     int s00, int s01, int s02, int s03,  ;; State 0
     int s10, int s11, int s12, int s13,  ;; State 1
     int s20, int s21, int s22, int s23,  ;; State 2
     int s30, int s31, int s32, int s33   ;; State 3
-) inline_ref {
-    
-    ;; Compute each new state element by performing the dot product
-    ;; of each MDS matrix row with the current state vector.
+) inline {
+    ;; Compute each new state element as the dot product of the MDS matrix row and state vector
 
-    ;; New State 0 = M00*s00 + M01*s10 + M02*s20 + M03*s30
-    int mul0_0 = my_mul_mod_limbs(M00, 0, 0, 0, s00, s01, s02, s03);
-    int mul1_0 = my_mul_mod_limbs(M01, 0, 0, 0, s10, s11, s12, s13);
-    int mul2_0 = my_mul_mod_limbs(M02, 0, 0, 0, s20, s21, s22, s23);
-    int mul3_0 = my_mul_mod_limbs(M03, 0, 0, 0, s30, s31, s32, s33);
-    int new_s00 = my_add_mod_limbs(mul0_0, 0, 0, 0, mul1_0, 0, 0, 0);
-    new_s00 = my_add_mod_limbs(new_s00, 0, 0, 0, mul2_0, 0, 0, 0);
-    new_s00 = my_add_mod_limbs(new_s00, 0, 0, 0, mul3_0, 0, 0, 0);
+    ;; New State 0
+    (int mul0_0, int mul0_1, int mul0_2, int mul0_3) = my_mul_mod_limbs(M00, 0, 0, 0, s00, s01, s02, s03);
+    (int mul1_0, int mul1_1, int mul1_2, int mul1_3) = my_mul_mod_limbs(M01, 0, 0, 0, s10, s11, s12, s13);
+    (int mul2_0, int mul2_1, int mul2_2, int mul2_3) = my_mul_mod_limbs(M02, 0, 0, 0, s20, s21, s22, s23);
+    (int mul3_0, int mul3_1, int mul3_2, int mul3_3) = my_mul_mod_limbs(M03, 0, 0, 0, s30, s31, s32, s33);
 
-    ;; New State 1 = M10*s00 + M11*s10 + M12*s20 + M13*s30
-    int mul0_1 = my_mul_mod_limbs(M10, 0, 0, 0, s00, s01, s02, s03);
-    int mul1_1 = my_mul_mod_limbs(M11, 0, 0, 0, s10, s11, s12, s13);
-    int mul2_1 = my_mul_mod_limbs(M12, 0, 0, 0, s20, s21, s22, s23);
-    int mul3_1 = my_mul_mod_limbs(M13, 0, 0, 0, s30, s31, s32, s33);
-    int new_s10 = my_add_mod_limbs(mul0_1, 0, 0, 0, mul1_1, 0, 0, 0);
-    new_s10 = my_add_mod_limbs(new_s10, 0, 0, 0, mul2_1, 0, 0, 0);
-    new_s10 = my_add_mod_limbs(new_s10, 0, 0, 0, mul3_1, 0, 0, 0);
+    (int new_s00_0, int new_s00_1, int new_s00_2, int new_s00_3) = my_add_mod_limbs(mul0_0, mul0_1, mul0_2, mul0_3, mul1_0, mul1_1, mul1_2, mul1_3);
+    (new_s00_0, new_s00_1, new_s00_2, new_s00_3) = my_add_mod_limbs(new_s00_0, new_s00_1, new_s00_2, new_s00_3, mul2_0, mul2_1, mul2_2, mul2_3);
+    (new_s00_0, new_s00_1, new_s00_2, new_s00_3) = my_add_mod_limbs(new_s00_0, new_s00_1, new_s00_2, new_s00_3, mul3_0, mul3_1, mul3_2, mul3_3);
 
-    ;; New State 2 = M20*s00 + M21*s10 + M22*s20 + M23*s30
-    int mul0_2 = my_mul_mod_limbs(M20, 0, 0, 0, s00, s01, s02, s03);
-    int mul1_2 = my_mul_mod_limbs(M21, 0, 0, 0, s10, s11, s12, s13);
-    int mul2_2 = my_mul_mod_limbs(M22, 0, 0, 0, s20, s21, s22, s23);
-    int mul3_2 = my_mul_mod_limbs(M23, 0, 0, 0, s30, s31, s32, s33);
-    int new_s20 = my_add_mod_limbs(mul0_2, 0, 0, 0, mul1_2, 0, 0, 0);
-    new_s20 = my_add_mod_limbs(new_s20, 0, 0, 0, mul2_2, 0, 0, 0);
-    new_s20 = my_add_mod_limbs(new_s20, 0, 0, 0, mul3_2, 0, 0, 0);
+    ;; New State 1
+    (int mul0_1_0, int mul0_1_1, int mul0_1_2, int mul0_1_3) = my_mul_mod_limbs(M10, 0, 0, 0, s00, s01, s02, s03);
+    (int mul1_1_0, int mul1_1_1, int mul1_1_2, int mul1_1_3) = my_mul_mod_limbs(M11, 0, 0, 0, s10, s11, s12, s13);
+    (int mul2_1_0, int mul2_1_1, int mul2_1_2, int mul2_1_3) = my_mul_mod_limbs(M12, 0, 0, 0, s20, s21, s22, s23);
+    (int mul3_1_0, int mul3_1_1, int mul3_1_2, int mul3_1_3) = my_mul_mod_limbs(M13, 0, 0, 0, s30, s31, s32, s33);
 
-    ;; New State 3 = M30*s00 + M31*s10 + M32*s20 + M33*s30
-    int mul0_3 = my_mul_mod_limbs(M30, 0, 0, 0, s00, s01, s02, s03);
-    int mul1_3 = my_mul_mod_limbs(M31, 0, 0, 0, s10, s11, s12, s13);
-    int mul2_3 = my_mul_mod_limbs(M32, 0, 0, 0, s20, s21, s22, s23);
-    int mul3_3 = my_mul_mod_limbs(M33, 0, 0, 0, s30, s31, s32, s33);
-    int new_s30 = my_add_mod_limbs(mul0_3, 0, 0, 0, mul1_3, 0, 0, 0);
-    new_s30 = my_add_mod_limbs(new_s30, 0, 0, 0, mul2_3, 0, 0, 0);
-    new_s30 = my_add_mod_limbs(new_s30, 0, 0, 0, mul3_3, 0, 0, 0);
+    (int new_s10_0, int new_s10_1, int new_s10_2, int new_s10_3) = my_add_mod_limbs(mul0_1_0, mul0_1_1, mul0_1_2, mul0_1_3, mul1_1_0, mul1_1_1, mul1_1_2, mul1_1_3);
+    (new_s10_0, new_s10_1, new_s10_2, new_s10_3) = my_add_mod_limbs(new_s10_0, new_s10_1, new_s10_2, new_s10_3, mul2_1_0, mul2_1_1, mul2_1_2, mul2_1_3);
+    (new_s10_0, new_s10_1, new_s10_2, new_s10_3) = my_add_mod_limbs(new_s10_0, new_s10_1, new_s10_2, new_s10_3, mul3_1_0, mul3_1_1, mul3_1_2, mul3_1_3);
 
-    ;; ===========================================================
-    ;; Return the New State After MDS Multiplication
-    ;; ===========================================================
+    ;; New State 2
+    (int mul0_2_0, int mul0_2_1, int mul0_2_2, int mul0_2_3) = my_mul_mod_limbs(M20, 0, 0, 0, s00, s01, s02, s03);
+    (int mul1_2_0, int mul1_2_1, int mul1_2_2, int mul1_2_3) = my_mul_mod_limbs(M21, 0, 0, 0, s10, s11, s12, s13);
+    (int mul2_2_0, int mul2_2_1, int mul2_2_2, int mul2_2_3) = my_mul_mod_limbs(M22, 0, 0, 0, s20, s21, s22, s23);
+    (int mul3_2_0, int mul3_2_1, int mul3_2_2, int mul3_2_3) = my_mul_mod_limbs(M23, 0, 0, 0, s30, s31, s32, s33);
+
+    (int new_s20_0, int new_s20_1, int new_s20_2, int new_s20_3) = my_add_mod_limbs(mul0_2_0, mul0_2_1, mul0_2_2, mul0_2_3, mul1_2_0, mul1_2_1, mul1_2_2, mul1_2_3);
+    (new_s20_0, new_s20_1, new_s20_2, new_s20_3) = my_add_mod_limbs(new_s20_0, new_s20_1, new_s20_2, new_s20_3, mul2_2_0, mul2_2_1, mul2_2_2, mul2_2_3);
+    (new_s20_0, new_s20_1, new_s20_2, new_s20_3) = my_add_mod_limbs(new_s20_0, new_s20_1, new_s20_2, new_s20_3, mul3_2_0, mul3_2_1, mul3_2_2, mul3_2_3);
+
+    ;; New State 3
+    (int mul0_3_0, int mul0_3_1, int mul0_3_2, int mul0_3_3) = my_mul_mod_limbs(M30, 0, 0, 0, s00, s01, s02, s03);
+    (int mul1_3_0, int mul1_3_1, int mul1_3_2, int mul1_3_3) = my_mul_mod_limbs(M31, 0, 0, 0, s10, s11, s12, s13);
+    (int mul2_3_0, int mul2_3_1, int mul2_3_2, int mul2_3_3) = my_mul_mod_limbs(M32, 0, 0, 0, s20, s21, s22, s23);
+    (int mul3_3_0, int mul3_3_1, int mul3_3_2, int mul3_3_3) = my_mul_mod_limbs(M33, 0, 0, 0, s30, s31, s32, s33);
+
+    (int new_s30_0, int new_s30_1, int new_s30_2, int new_s30_3) = my_add_mod_limbs(mul0_3_0, mul0_3_1, mul0_3_2, mul0_3_3, mul1_3_0, mul1_3_1, mul1_3_2, mul1_3_3);
+    (new_s30_0, new_s30_1, new_s30_2, new_s30_3) = my_add_mod_limbs(new_s30_0, new_s30_1, new_s30_2, new_s30_3, mul2_3_0, mul2_3_1, mul2_3_2, mul2_3_3);
+    (new_s30_0, new_s30_1, new_s30_2, new_s30_3) = my_add_mod_limbs(new_s30_0, new_s30_1, new_s30_2, new_s30_3, mul3_3_0, mul3_3_1, mul3_3_2, mul3_3_3);
+
+    ;; Return the updated state (16 integers)
     return (
-        new_s00, 0, 0, 0,  ;; s00 updated, higher limbs set to 0
-        new_s10, 0, 0, 0,  ;; s10 updated, higher limbs set to 0
-        new_s20, 0, 0, 0,  ;; s20 updated, higher limbs set to 0
-        new_s30, 0, 0, 0   ;; s30 updated, higher limbs set to 0
+        new_s00_0, new_s00_1, new_s00_2, new_s00_3,
+        new_s10_0, new_s10_1, new_s10_2, new_s10_3,
+        new_s20_0, new_s20_1, new_s20_2, new_s20_3,
+        new_s30_0, new_s30_1, new_s30_2, new_s30_3
     );
 }
 
+;; ===========================================================
+;; 7. Poseidon2 Permutation Function
+;; ===========================================================
+;; S-box: Raise the input (4 limbs) to the power of 5
+(int, int, int, int) my_sbox_limbs(int x0, int x1, int x2, int x3) inline {
+    ;; Compute x^2
+    (int x2_0, int x2_1, int x2_2, int x2_3) = my_mul_mod_limbs(x0, x1, x2, x3, x0, x1, x2, x3);
 
-;; ===========================================================
-;; 6. Poseidon2 Permutation
-;; ===========================================================
+    ;; Compute x^4 (x^2)^2
+    (int x4_0, int x4_1, int x4_2, int x4_3) = my_mul_mod_limbs(x2_0, x2_1, x2_2, x2_3, x2_0, x2_1, x2_2, x2_3);
+
+    ;; Compute x^5 = x^4 * x
+    (int x5_0, int x5_1, int x5_2, int x5_3) = my_mul_mod_limbs(x4_0, x4_1, x4_2, x4_3, x0, x1, x2, x3);
+
+    ;; Return the result of x^5
+    return (x5_0, x5_1, x5_2, x5_3);
+}
+
+;; Poseidon2 permutation function
 (int, int, int, int, 
  int, int, int, int, 
  int, int, int, int, 
@@ -648,8 +670,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     int s10, int s11, int s12, int s13,  ;; State 1
     int s20, int s21, int s22, int s23,  ;; State 2
     int s30, int s31, int s32, int s33   ;; State 3
-) 
-{
+) {
     ;; Initialize local state variables
     int local_s00 = s00; int local_s01 = s01; int local_s02 = s02; int local_s03 = s03;
     int local_s10 = s10; int local_s11 = s11; int local_s12 = s12; int local_s13 = s13;
@@ -661,25 +682,33 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
         ;; ===========================================================
         ;; Add Round Constants to Each State Element
         ;; ===========================================================
-        ;; State 0
+        ;; Add to State 0
         (int rc0, int rc1, int rc2, int rc3) = my_get_round_constant(i * T + 0);
-        (int ns00, int ns01, int ns02, int ns03) = my_add_mod_limbs(local_s00, local_s01, local_s02, local_s03, rc0, rc1, rc2, rc3);
-        local_s00 = ns00; local_s01 = ns01; local_s02 = ns02; local_s03 = ns03;
+        (local_s00, local_s01, local_s02, local_s03) = my_add_mod_limbs(
+            local_s00, local_s01, local_s02, local_s03,
+            rc0, rc1, rc2, rc3
+        );
 
-        ;; State 1
+        ;; Add to State 1
         (rc0, rc1, rc2, rc3) = my_get_round_constant(i * T + 1);
-        (int ns10, int ns11, int ns12, int ns13) = my_add_mod_limbs(local_s10, local_s11, local_s12, local_s13, rc0, rc1, rc2, rc3);
-        local_s10 = ns10; local_s11 = ns11; local_s12 = ns12; local_s13 = ns13;
+        (local_s10, local_s11, local_s12, local_s13) = my_add_mod_limbs(
+            local_s10, local_s11, local_s12, local_s13,
+            rc0, rc1, rc2, rc3
+        );
 
-        ;; State 2
+        ;; Add to State 2
         (rc0, rc1, rc2, rc3) = my_get_round_constant(i * T + 2);
-        (int ns20, int ns21, int ns22, int ns23) = my_add_mod_limbs(local_s20, local_s21, local_s22, local_s23, rc0, rc1, rc2, rc3);
-        local_s20 = ns20; local_s21 = ns21; local_s22 = ns22; local_s23 = ns23;
+        (local_s20, local_s21, local_s22, local_s23) = my_add_mod_limbs(
+            local_s20, local_s21, local_s22, local_s23,
+            rc0, rc1, rc2, rc3
+        );
 
-        ;; State 3
+        ;; Add to State 3
         (rc0, rc1, rc2, rc3) = my_get_round_constant(i * T + 3);
-        (int ns30, int ns31, int ns32, int ns33) = my_add_mod_limbs(local_s30, local_s31, local_s32, local_s33, rc0, rc1, rc2, rc3);
-        local_s30 = ns30; local_s31 = ns31; local_s32 = ns32; local_s33 = ns33;
+        (local_s30, local_s31, local_s32, local_s33) = my_add_mod_limbs(
+            local_s30, local_s31, local_s32, local_s33,
+            rc0, rc1, rc2, rc3
+        );
 
         ;; ===========================================================
         ;; Apply S-Box Transformation
@@ -699,21 +728,17 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
         ;; ===========================================================
         ;; Apply Linear Layer (MDS Matrix Multiplication)
         ;; ===========================================================
-        ;; Replace the flawed MDS multiplication code with a call to the helper function
-        (local_s00, local_s10, local_s20, local_s30) = my_apply_mds(
+        (local_s00, local_s01, local_s02, local_s03,
+         local_s10, local_s11, local_s12, local_s13,
+         local_s20, local_s21, local_s22, local_s23,
+         local_s30, local_s31, local_s32, local_s33) = my_apply_mds(
             local_s00, local_s01, local_s02, local_s03,
             local_s10, local_s11, local_s12, local_s13,
             local_s20, local_s21, local_s22, local_s23,
             local_s30, local_s31, local_s32, local_s33
         );
-
-        ;; Increment Round Counter
-        i += 1;
     }
-
-    ;; ===========================================================
     ;; Return the Updated State After All Rounds
-    ;; ===========================================================
     return (
         local_s00, local_s01, local_s02, local_s03,
         local_s10, local_s11, local_s12, local_s13,
@@ -722,8 +747,9 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     );
 }
 
+
 ;; ===========================================================
-;; 7. Poseidon2 Hash Function
+;; 8. Poseidon2 Hash Function
 ;; ===========================================================
 
 (int, int) my_poseidon2_hash(
@@ -745,16 +771,8 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     return (s00, s01);
 }
 
-;; For off-chain retrieval or testing
-(int, int) my_get_poseidon2_hash(
-    int in00, int in01, int in02, int in03,
-    int in10, int in11, int in12, int in13
-) method_id {
-    return my_poseidon2_hash(in00, in01, in02, in03, in10, in11, in12, in13);
-}
-
 ;; ===========================================================
-;; 8. Contract Entry Point
+;; 9. Contract Entry Point
 ;; ===========================================================
 
 () my_recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
@@ -769,7 +787,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
 
     ;; Extract the operation type from the incoming message
     if (in_msg.slice_empty?()) {
-        return ();  ;; Exit if the message is empty
+        throw(0x0001);  ;; Invalid operation: Empty message
     }
     var op = in_msg~load_uint(32);
 
@@ -777,7 +795,7 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     if (op == 1) {  ;; Compute Poseidon2 hash
         ;; Ensure there are enough bits for inputs
         if (in_msg.slice_bits() < (2 * NUM_LIMBS * LIMB_SIZE)) {
-            throw(0x01);  ;; Invalid input length
+            throw(0x0002);  ;; Invalid input length
         }
 
         ;; Extract the inputs
@@ -796,9 +814,9 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
             in00, in01, in02, in03, in10, in11, in12, in13
         );
 
-        ;; Construct the response message (only two hash values)
+        ;; Construct the response message (only two hash values)          
         var msg = begin_cell()
-            .store_uint(0x10, 6)          ;; nobounce flag
+            .store_uint(0x10, 6)          ;; nobounce flag + ignore errors flag
             .store_slice(my_address())    ;; sender address
             .store_uint(0x076ef1ea, 32)   ;; operation code for outgoing message
             .store_uint(hash00, LIMB_SIZE)
@@ -808,12 +826,12 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
         ;; Send the hash result back
         send_raw_message(msg, 64); ;; mode 64: carry all remaining value of the inbound message
     } else {
-        throw(0xffff);  ;; Throw exception for unknown operations
+        throw(0xFFFF);  ;; Unknown operation
     }
 }
 
 ;; ===========================================================
-;; 9. Main Function
+;; 10. Main Function
 ;; ===========================================================
 
 () main() {
@@ -821,8 +839,5 @@ const int NUM_LIMBS = 4;  ;; Assuming 4 limbs for 256-bit numbers (64-bit limbs)
     var in_msg = in_msg_cell.begin_parse();  ;; Start parsing the incoming message
     my_recv_internal(0, in_msg_cell, in_msg);  ;; Call the recv_internal function with necessary parameters
 }
-
-
-
 </code></pre>
 <p></p>
